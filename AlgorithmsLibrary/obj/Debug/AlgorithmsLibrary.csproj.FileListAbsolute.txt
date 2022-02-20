@@ -1,6 +1,0 @@
-C:\Users\User\source\repos\AlgorithmsComparision\AlgorithmsLibrary\bin\Debug\AlgorithmsLibrary.dll
-C:\Users\User\source\repos\AlgorithmsComparision\AlgorithmsLibrary\bin\Debug\AlgorithmsLibrary.pdb
-C:\Users\User\source\repos\AlgorithmsComparision\AlgorithmsLibrary\obj\Debug\AlgorithmsLibrary.csproj.AssemblyReference.cache
-C:\Users\User\source\repos\AlgorithmsComparision\AlgorithmsLibrary\obj\Debug\AlgorithmsLibrary.csproj.CoreCompileInputs.cache
-C:\Users\User\source\repos\AlgorithmsComparision\AlgorithmsLibrary\obj\Debug\AlgorithmsLibrary.dll
-C:\Users\User\source\repos\AlgorithmsComparision\AlgorithmsLibrary\obj\Debug\AlgorithmsLibrary.pdb
