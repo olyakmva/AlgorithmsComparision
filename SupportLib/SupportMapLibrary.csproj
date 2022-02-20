@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SupportMapLibrary</RootNamespace>
     <AssemblyName>SupportMapLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,10 +32,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotSpatial.Data">
-      <HintPath>..\MainForm\bin\Debug\DotSpatial.Data.dll</HintPath>
+      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="DotSpatial.Mono">
+      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Mono.dll</HintPath>
+    </Reference>
+    <Reference Include="DotSpatial.Projections">
+      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Projections.dll</HintPath>
+    </Reference>
+    <Reference Include="DotSpatial.Serialization">
+      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Topology">
-      <HintPath>..\MainForm\bin\Debug\DotSpatial.Topology.dll</HintPath>
+      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Topology.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
