@@ -69,6 +69,10 @@
     <Compile Include="Features\LengthComputation.cs" />
     <Compile Include="Features\Sinuosity.cs" />
     <Compile Include="Features\TripletComputation.cs" />
+    <Compile Include="FourierDescAlgm\FourierDescAlgm.cs" />
+    <Compile Include="FourierDescAlgm\LineSegmentClass.cs" />
+    <Compile Include="FourierDescAlgm\PolygonClass.cs" />
+    <Compile Include="FourierDescAlgm\ShapeAnalysysClass.cs" />
     <Compile Include="HausdorfDistanceCriterion.cs" />
     <Compile Include="Triangle.cs" />
     <Compile Include="WangMullerAlgm.cs" />
@@ -80,6 +84,9 @@
     <Compile Include="DouglasPeuckerAlgm.cs" />
     <Compile Include="SleeveFitAlgm.cs" />
     <Compile Include="VisWhyattAlgm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FourierDescAlgm\Elements\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
