@@ -20,9 +20,9 @@ namespace AlgorithmsLibrary
         {
             m_polygon = new MapPolygon(Map);
         }
+
         public void GetPerSegmentDist(int pos)
         {
-            object missing = Type.Missing;
             lengthArray = new List<double>();
             lenAcculateArray = new List<double>();
             angleArray = new List<double>();
@@ -32,12 +32,10 @@ namespace AlgorithmsLibrary
             List<MapPoint> pointCollection2 = new List<MapPoint>();
             List<MapPoint> pointCollection = new List<MapPoint>();
 
-            // как посчитать площадь полигона
             double dArea = m_polygon.GetArea();
             int N = pointCollection1.Count;
             if (dArea > 0)
             {
-
                 for (int i = N - 1; i > 0; i--)
                 {
                     pointCollection2.Add(pointCollection1[i]);
