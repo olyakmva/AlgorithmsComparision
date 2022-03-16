@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlgorithmsLibrary.FourierDescAlgm
+namespace AlgorithmsLibrary
 {
     public class ShapeAnalysis
     {
-        private MapData m_polygon = null;
+        private MapPolygon m_polygon = null;
         public List<double> lengthArray = null;
         public List<double> lenAcculateArray = null;
         public List<double> angleArray = null;
@@ -16,9 +16,9 @@ namespace AlgorithmsLibrary.FourierDescAlgm
         public double ZERO_FLOAT = +1.401298E-45;
         public double m_jifeng = 0.0;
 
-        public ShapeAnalysis(MapData polygon)
+        public ShapeAnalysis(MapData Map)
         {
-            m_polygon = polygon;
+            m_polygon = new MapPolygon(Map);
         }
         public void GetPerSegmentDist(int pos)
         {
@@ -27,14 +27,13 @@ namespace AlgorithmsLibrary.FourierDescAlgm
             lenAcculateArray = new List<double>();
             angleArray = new List<double>();
 
-            //проверить корректность периметра
             double perimeter = m_polygon.GetLength();
             List<MapPoint> pointCollection1 = m_polygon.GetAllVertices();
             List<MapPoint> pointCollection2 = new List<MapPoint>();
             List<MapPoint> pointCollection = new List<MapPoint>();
 
             // как посчитать площадь полигона
-            double dArea = m_polygon.Area;
+            double dArea = m_polygon.GetArea();
             int N = pointCollection1.Count;
             if (dArea > 0)
             {
@@ -121,6 +120,7 @@ namespace AlgorithmsLibrary.FourierDescAlgm
             int num22 = lenAcculateArray.Count;
             lenAcculateArray[num22 - 1] = 1.0;
         }
+
         //вычисление азимута (в радианах)                  
         double Bearing(double deltaX, double deltaY)
         {

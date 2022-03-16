@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlgorithmsLibrary.FourierDescAlgm
+namespace AlgorithmsLibrary
 {
     public class FourierDescAlgm : ISimplificationAlgm
     {
@@ -12,7 +12,7 @@ namespace AlgorithmsLibrary.FourierDescAlgm
 
         public virtual void Run(MapData map)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void Run(ref List<MapPoint> chain, int startIndex, int endIndex)

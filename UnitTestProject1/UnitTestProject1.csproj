@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="BendTesting.cs" />
     <Compile Include="DouglasPeuckerUnitTest.cs" />
+    <Compile Include="FourierAlgmUnitTest.cs" />
     <Compile Include="MainUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SleeveFitUnitTest.cs" />
