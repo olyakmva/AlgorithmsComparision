@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlgorithmsLibrary
 {
-    public class Fourier
+    public class Fourier : FourierDescFatherClass
     {
         //Набор точек
         private List<MapPoint> pointCol = null;
@@ -14,7 +14,7 @@ namespace AlgorithmsLibrary
         //private List<MapPoint> newPointCol = null;
 
         private long m_PointNum = 0;
-        private long nTerm = 0;
+        
 
         //Si
         private double[] m_accuDist = null;
@@ -27,7 +27,7 @@ namespace AlgorithmsLibrary
         private double[] Ay = null;
         private double[] By = null;
        
-        private double[] d = null;
+        
 
         private double[] Power = null;
         
@@ -108,7 +108,7 @@ namespace AlgorithmsLibrary
             GetAllDist();
             GetFourierXparameter();
             GetFourierYparameter();
-            CalculateShapeVector();
+            CalculateShapeVector(true);
         }
 
         //public void GetAllDist()
@@ -342,28 +342,6 @@ namespace AlgorithmsLibrary
         //    }
         //}
 
-        public double[] CalculateShapeVector()
-        {
-            long n = nTerm + 1;
-            double[] D = new double[n];
-            d = new double[n - 1];
-            ratio = new double[n - 1];
-            double sum = 0;
-            for (int i = 1; i < n; i++)
-            {
-                double CX = Ax[i] + By[i];
-                double CY = Bx[i] - Ay[i];
-                D[i] = Math.Abs(Math.Sqrt(CX * CX + CY * CY));
-                sum = sum + D[i];
-            }
-            for (int i = 1; i < n; i++)
-            {
-                ratio[i - 1] = D[i] / sum;
-                d[i - 1] = D[i] / D[1];
-            }
-            return d;
-        }
-
         public double[] CalculatePower()
         {
             long n = nTerm + 1;
@@ -525,28 +503,6 @@ namespace AlgorithmsLibrary
             return Entropy;
         }
 
-        public double[] CalculateEntropy2(long Number)
-        {
-            double[] Proportion = new double[Number];
-
-            double d_sum = default(double);
-
-            for (int i = 0; i < Proportion.Length; i++)
-            {
-                d_sum += d[i + 1];
-            }
-
-            for (int i = 0; i < Proportion.Length; i++)
-            {
-                Proportion[i] = d[i + 1] / d_sum;
-            }
-
-            double[] Entropy = new double[Proportion.Length];
-            for (int i = 0; i < Entropy.Length; i++)
-            {
-                Entropy[i] = -Proportion[i] * Math.Log(Proportion[i], 2);
-            }
-            return Entropy;
-        }
+        
     }
 }

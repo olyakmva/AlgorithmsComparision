@@ -71,6 +71,7 @@
     <Compile Include="Features\TripletComputation.cs" />
     <Compile Include="FourierDescAlgm\FourierDescAlgm.cs" />
     <Compile Include="FourierDescAlgm\FourierDescClass.cs" />
+    <Compile Include="FourierDescAlgm\FourierDescFatherClass.cs" />
     <Compile Include="FourierDescAlgm\FourierNotClosedDescClass.cs" />
     <Compile Include="FourierDescAlgm\LineSegmentClass.cs" />
     <Compile Include="FourierDescAlgm\PolygonClass.cs" />

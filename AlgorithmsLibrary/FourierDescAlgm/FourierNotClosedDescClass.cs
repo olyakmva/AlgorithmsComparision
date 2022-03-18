@@ -6,34 +6,28 @@ using System.Threading.Tasks;
 
 namespace AlgorithmsLibrary
 {
-    public class Fourier_NotClosed
+    public class Fourier_NotClosed : FourierDescFatherClass
     {
         #region After
-        //点集
         private List<MapPoint> pointCol = null;
-        //还原点集？(截至2017-11-7未使用)
         //private IPointCollection newPointCol = null;
-        //点的数量
+
         private long m_PointNum = 0;
-        //算子数量
-        private long nTerm = 0;
+
         //Si
         private double[] m_accuDist = null;
-        //点i-1到点Si的距离 
         private double[] m_dis_betPoint = null;
-        //总长度
+        
         private double m_totalS = 0.0;
-        //Ax,Bx,Ay,By系数数组
+      
         private double[] Ax = null;
         private double[] Bx = null;
         private double[] Ay = null;
         private double[] By = null;
-        //傅里叶算子
-        private double[] d = null;
-        //每个算子所占比例
+        
         private double[] ratio = null;
 
-        //清除距离过近的点
+        
         public Fourier_NotClosed(List<MapPoint> pointcollection, long nTerm)
         {
             this.nTerm = nTerm;
@@ -105,7 +99,7 @@ namespace AlgorithmsLibrary
             GetAllDist();
             GetFourierXparameter();
             GetFourierYparameter();
-            CalculateShapeVector();
+            CalculateShapeVector(false);
         }
 
         //返回总长度
@@ -337,28 +331,6 @@ namespace AlgorithmsLibrary
         //    }
         //}
 
-        public double[] CalculateShapeVector()
-        {
-            long n = nTerm + 1;
-            double[] D = new double[n];
-            d = new double[n - 1];
-            ratio = new double[n - 1];
-            double sum = 0;
-            for (int i = 1; i < n; i++)
-            {
-                double CX = Ax[i] + By[i];
-                double CY = Bx[i] - Ay[i];
-                D[i] = Math.Sqrt(CX * CX + CY * CY);
-                sum = sum + D[i];
-            }
-            for (int i = 1; i < n; i++)
-            {
-                ratio[i - 1] = D[i] / sum;
-                d[i - 1] = D[i] / D[1];
-            }
-            return d;
-        }
-
         public double[,] GetRecoveryPoints(long FittingPointNumber, long Fouriers)
         {
             double x = Ax[0];
@@ -488,29 +460,7 @@ namespace AlgorithmsLibrary
             return Entropy;
         }
 
-        public double[] CalculateEntropy2(long Number)
-        {
-            double[] Proportion = new double[Number];
-
-            double d_sum = default(double);
-
-            for (int i = 0; i < Proportion.Length; i++)
-            {
-                d_sum += d[i + 1];
-            }
-
-            for (int i = 0; i < Proportion.Length; i++)
-            {
-                Proportion[i] = d[i + 1] / d_sum;
-            }
-
-            double[] Entropy = new double[Proportion.Length];
-            for (int i = 0; i < Entropy.Length; i++)
-            {
-                Entropy[i] = -Proportion[i] * Math.Log(Proportion[i], 2);
-            }
-            return Entropy;
-        }
+        
         #endregion
     }
 }
