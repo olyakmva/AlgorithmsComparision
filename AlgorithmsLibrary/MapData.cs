@@ -99,6 +99,22 @@ namespace AlgorithmsLibrary
             return resultList;
         }
 
+        public double GetLength()
+        {
+            var vertices = GetAllVertices();
+
+            double length = 0;
+
+            MapPoint pre = vertices[0];
+            for (int i = 1; i < vertices.Count; i++)
+            {
+                length += pre.DistanceToVertex(vertices[i]);
+                pre = vertices[i];
+            }
+
+            return length;
+        }
+
         
         public MapData Clone()
         {
@@ -205,6 +221,24 @@ namespace AlgorithmsLibrary
         public double GetDistance(MapPoint v)
         {
             return Math.Abs(A * v.X + B * v.Y + C) / Math.Sqrt(A * A + B * B);
+        }
+
+        public double GetAngle()
+        {
+            MapPoint zeroCoordAtX = new MapPoint
+            {
+                X = 0,
+                Y = 0
+            };
+            MapPoint oneCoordAtX = new MapPoint
+            {
+                X = 1,
+                Y = 0
+            };
+
+            Line otherLine = new Line(zeroCoordAtX, oneCoordAtX);
+
+            return this.GetAngle(otherLine);
         }
 
         public double GetAngle(Line otherLine)
@@ -336,6 +370,7 @@ namespace AlgorithmsLibrary
             line.C = point.Y * A - point.X * B;
             return line;
         }
+
     }
 
 }
