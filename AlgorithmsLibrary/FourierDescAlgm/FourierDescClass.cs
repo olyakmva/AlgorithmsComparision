@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlgorithmsLibrary
 {
@@ -10,7 +7,7 @@ namespace AlgorithmsLibrary
     {
         //Набор точек
         private List<MapPoint> pointCol = null;
-        //Резервный набор точек. Возмомжно не нужен....
+        //Резервный набор точек. Возможно не нужен....
         //private List<MapPoint> newPointCol = null;
 
         private long m_PointNum = 0;
