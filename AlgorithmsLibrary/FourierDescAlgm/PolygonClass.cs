@@ -15,6 +15,10 @@ namespace AlgorithmsLibrary
             this.Map = Map;
             this.Vertices = Map.GetAllVertices();
         }
+        public MapPolygon(List<MapPoint> Vertices)
+        {
+            this.Vertices = Vertices;
+        }
 
         /// <summary>
         /// Вычисление площади полигона

@@ -1,34 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AlgorithmsLibrary
 {
     public class Fourier : FourierDescFatherClass
     {
-        //Набор точек
-        private List<MapPoint> pointCol = null;
-        //Резервный набор точек. Возможно не нужен....
+        //Резервный набор точек.
         //private List<MapPoint> newPointCol = null;
-
-        private long m_PointNum = 0;
-        
-
-        //Si
-        private double[] m_accuDist = null;
-        private double[] m_dis_betPoint = null;
 
         private double m_totalS = 0.0;
 
-        private double[] Ax = null;
-        private double[] Bx = null;
-        private double[] Ay = null;
-        private double[] By = null;
-       
-        
-
-        private double[] Power = null;
-        
-        private double[] ratio = null;
+        //private double[] Power = null;
 
         public Fourier(List<MapPoint> pointcollection, long nTerm)
         {
@@ -36,70 +21,32 @@ namespace AlgorithmsLibrary
             while (true)
             {
                 bool bOK = true;
-                pointCol = pointcollection;
-                for (int i = 1; i < pointCol.Count; i++)
+                arrayOfMapPoints = pointcollection;
+                for (int i = 1; i < arrayOfMapPoints.Count; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     if (Math.Abs(p1.X - p2.X) < 0.1 && Math.Abs(p1.Y - p2.Y) < 0.1)
                     {
-                        pointCol.RemoveAt(i);
+                        arrayOfMapPoints.RemoveAt(i);
                         i--;
                         bOK = false;
                     }
                 }
                 if (bOK)
                 {
-                    m_PointNum = pointCol.Count;
+                    countOfPointsObject = arrayOfMapPoints.Count;
                     break;
                 }
             }
+        }
 
-        }
-        public double GetAx(int index)
-        {
-            return Ax[index];
-        }
-        public double GetBx(int index)
-        {
-            return Bx[index];
-        }
-        public double GetAy(int index)
-        {
-            return Ay[index];
-        }
-        public double GetBy(int index)
-        {
-            return By[index];
-        }
-        public double GetShapeVector(int index)
-        {
-            return d[index];
-        }
-        public double GetRatio(int index)
-        {
-            return ratio[index];
-        }
-        public double[] ArrayAx()
-        {
-            return Ax;
-        }
-        public double[] ArrayBx()
-        {
-            return Bx;
-        }
-        public double[] ArrayAy()
-        {
-            return Ay;
-        }
-        public double[] ArrayBy()
-        {
-            return By;
-        }
-        public double[] ArrayPower()
-        {
-            return Power;
-        }
+        //public double[] ArrayPower()
+        //{
+        //    return Power;
+        //}
+
+
         public void CalculateAllValue()
         {
             GetAllDist();
@@ -132,27 +79,29 @@ namespace AlgorithmsLibrary
         //}
 
         //Возвращаемая общая длина
+        //инициализирует m_totalS
         public double GetAllDist()
         {
-            m_dis_betPoint = new double[m_PointNum - 1];
-            m_accuDist = new double[m_PointNum];
-            for (int i = 0; i < m_PointNum - 1; i++)
+            arrayDistancesBetweenPoints = new double[countOfPointsObject - 1];
+            m_accuDist = new double[countOfPointsObject];
+
+            for (int i = 0; i < countOfPointsObject - 1; i++)
             {
-                MapPoint p2 = pointCol[i + 1];
-                MapPoint p1 = pointCol[i];
-                double detx = p2.X - p1.X;
-                double dety = p2.Y - p1.Y; ;
-                double squareSum = detx * detx + dety * dety;
-                m_dis_betPoint[i] = Math.Sqrt(squareSum);
+                MapPoint p2 = arrayOfMapPoints[i + 1];
+                MapPoint p1 = arrayOfMapPoints[i];
+
+                arrayDistancesBetweenPoints[i] = p1.DistanceToVertex(p2);
             }
+
             double s = 0.0;
             m_accuDist[0] = 0.0;
-            for (int i = 0; i < m_PointNum - 1; i++)
+            for (int i = 0; i < countOfPointsObject - 1; i++)
             {
-                m_accuDist[i + 1] = s + m_dis_betPoint[i];
+                m_accuDist[i + 1] = s + arrayDistancesBetweenPoints[i];
                 s = m_accuDist[i + 1];
             }
-            m_totalS = m_accuDist[m_PointNum - 1];
+
+            m_totalS = m_accuDist[countOfPointsObject - 1];
             return m_totalS;
         }
 
@@ -164,10 +113,10 @@ namespace AlgorithmsLibrary
             Bx = new double[n + 1];
             Bx[0] = 0.0;
             Ax[0] = 0.0;
-            for (int i = 1; i < m_PointNum; i++)
+            for (int i = 1; i < countOfPointsObject; i++)
             {
-                MapPoint p1 = pointCol[i - 1];
-                MapPoint p2 = pointCol[i];
+                MapPoint p1 = arrayOfMapPoints[i - 1];
+                MapPoint p2 = arrayOfMapPoints[i];
                 double delx = (double)(p2.X - p1.X);
                 double dels = m_accuDist[i] - m_accuDist[i - 1];
                 double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -182,10 +131,10 @@ namespace AlgorithmsLibrary
             {
                 Ax[k] = 0;
                 double angle = 2 * Math.PI * k / m_totalS;
-                for (int i = 1; i < m_PointNum; i++)
+                for (int i = 1; i < countOfPointsObject; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.X - p1.X;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -206,10 +155,10 @@ namespace AlgorithmsLibrary
                 }
 
                 Bx[k] = 0;
-                for (int i = 1; i < m_PointNum; i++)
+                for (int i = 1; i < countOfPointsObject; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.X - p1.X;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -240,10 +189,10 @@ namespace AlgorithmsLibrary
             By = new double[n + 1];
             By[0] = 0.0;
             Ay[0] = 0.0;
-            for (int i = 1; i < m_PointNum; i++)
+            for (int i = 1; i < countOfPointsObject; i++)
             {
-                MapPoint p1 = pointCol[i - 1];
-                MapPoint p2 = pointCol[i];
+                MapPoint p1 = arrayOfMapPoints[i - 1];
+                MapPoint p2 = arrayOfMapPoints[i];
                 double delx = p2.Y - p1.Y;
                 double dels = m_accuDist[i] - m_accuDist[i - 1];
                 double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -258,10 +207,10 @@ namespace AlgorithmsLibrary
             {
                 Ay[k] = 0;
                 double angle = 2 * Math.PI * k / m_totalS;
-                for (int i = 1; i < m_PointNum; i++)
+                for (int i = 1; i < countOfPointsObject; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.Y - p1.Y;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -282,10 +231,10 @@ namespace AlgorithmsLibrary
                 }
 
                 By[k] = 0;
-                for (int i = 1; i < m_PointNum; i++)
+                for (int i = 1; i < countOfPointsObject; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.Y - p1.Y;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -339,33 +288,35 @@ namespace AlgorithmsLibrary
         //    }
         //}
 
-        public double[] CalculatePower()
+        //public double[] CalculatePower()
+        //{
+        //    long n = nTerm + 1;
+        //    double[] D = new double[n];
+        //    Power = new double[n];
+
+        //    double sum = 0;
+        //    for (int i = 1; i < n; i++)
+        //    {
+        //        double CX = Ax[i] + By[i];
+        //        double CY = Bx[i] - Ay[i];
+        //        D[i] = Math.Sqrt(CX * CX + CY * CY);
+        //        sum = sum + D[i];
+        //    }
+
+        //    Power[0] = Math.Sqrt(Ax[0] * Ax[0] + Ay[0] * Ay[0]) / 4;
+        //    for (int i = 1; i < n; i++)
+        //    {
+        //        Power[i] = D[i] * D[i] / 4;
+        //    }
+        //    return Power;
+        //}
+
+        public List<MapPoint> GetRecoveryPoints(long FittingPointNumber)
         {
-            long n = nTerm + 1;
-            double[] D = new double[n];
-            Power = new double[n];
+            var ReturnPoints = new List<MapPoint>();
 
-            double sum = 0;
-            for (int i = 1; i < n; i++)
-            {
-                double CX = Ax[i] + By[i];
-                double CY = Bx[i] - Ay[i];
-                D[i] = Math.Sqrt(CX * CX + CY * CY);
-                sum = sum + D[i];
-            }
-
-            Power[0] = Math.Sqrt(Ax[0] * Ax[0] + Ay[0] * Ay[0]) / 4;
-            for (int i = 1; i < n; i++)
-            {
-                Power[i] = D[i] * D[i] / 4;
-            }
-            return Power;
-        }
-
-        public double[,] GetRecoveryPoints(long FittingPointNumber)
-        {
-            double x = Ax[0];
-            double y = Ay[0];
+            MapPoint mapPoint = new MapPoint(Ax[0], Ay[0], 1, 1);
+            
             double s = GetAllDist();
             double[] ss = new double[FittingPointNumber + 1];
             ss[0] = 0.0;
@@ -374,9 +325,6 @@ namespace AlgorithmsLibrary
             {
                 ss[i] = ss[i - 1] + s_average;
             }
-
-            double[] xx = new double[FittingPointNumber];
-            double[] yy = new double[FittingPointNumber];
 
             for (int j = 1; j < FittingPointNumber + 1; j++)
             {
@@ -388,15 +336,10 @@ namespace AlgorithmsLibrary
                     Xin += Ax[i] * Math.Cos(angle) + Bx[i] * Math.Sin(angle);
                     Yin += Ay[i] * Math.Cos(angle) + By[i] * Math.Sin(angle);
                 }
-                xx[j - 1] = Xin + x;
-                yy[j - 1] = Yin + y;
+
+                ReturnPoints.Add(new MapPoint(Xin + mapPoint.X, Yin + mapPoint.Y, j - 1, 1));
             }
-            double[,] ReturnPoints = new double[FittingPointNumber, 2];
-            for (int i = 0; i < FittingPointNumber; i++)
-            {
-                ReturnPoints[i, 0] = xx[i];
-                ReturnPoints[i, 1] = yy[i];
-            }
+
             return ReturnPoints;
         }
 
@@ -404,6 +347,7 @@ namespace AlgorithmsLibrary
         {
             double x = Ax[0];
             double y = Ay[0];
+
             double s = GetAllDist();
             double[] ss = new double[FittingPointNumber + 1];
             ss[0] = 0.0;
@@ -442,6 +386,7 @@ namespace AlgorithmsLibrary
         {
             double x = AX[0];
             double y = AY[0];
+
             double s = GetAllDist();
             double[] ss = new double[FittingPointNumber + 1];
             ss[0] = 0.0;
