@@ -22,7 +22,7 @@ namespace AlgorithmsLibrary
         protected internal double[] Ay = null;
         protected internal double[] By = null;
 
-        protected internal double[] m_accuDist = null;
+        protected internal double[] sequentialCalculationPolylineLength = null;
         protected internal double[] arrayDistancesBetweenPoints = null;
 
         //public double GetAx(int index) => Ax[index];

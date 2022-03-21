@@ -37,5 +37,32 @@ namespace UnitTestProject1
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void LengthOnePiece_GetAllDistMethod()
+        {
+            var list = new List<MapPoint>() { new MapPoint(6, 0, 1, 1), new MapPoint(0, 0, 1, 1) };
+
+            Fourier fourier = new Fourier(list, 0);
+
+            double expected = 6;
+            double actual = fourier.GetAllDist();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void LengthOfPolyline_GetAllDistMethod()
+        {
+            var list = new List<MapPoint>() { new MapPoint(0, 0, 1, 1), new MapPoint(1, 0, 1, 1),
+            new MapPoint(1, 1, 1, 1), new MapPoint(0, 1, 1, 1), new MapPoint(0, 0, 1, 1)};
+
+            Fourier fourier = new Fourier(list, 0);
+
+            double expected = 4;
+            double actual = fourier.GetAllDist();
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
