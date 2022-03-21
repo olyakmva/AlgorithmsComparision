@@ -8,8 +8,12 @@ namespace AlgorithmsLibrary
 {
     public abstract class FourierDescFatherClass
     {
+        protected internal List<MapPoint> arrayOfMapPoints = null;
+
         protected internal double[] d = null;
         protected internal long nTerm = 0;
+
+        protected internal long countOfPointsObject = 0;
 
         protected internal double[] ratio = null;
 
@@ -19,7 +23,7 @@ namespace AlgorithmsLibrary
         protected internal double[] By = null;
 
         protected internal double[] m_accuDist = null;
-        protected internal double[] m_dis_betPoint = null;
+        protected internal double[] arrayDistancesBetweenPoints = null;
 
         //public double GetAx(int index) => Ax[index];
         //public double GetBx(int index) => Bx[index];

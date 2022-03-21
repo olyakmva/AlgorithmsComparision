@@ -8,9 +8,6 @@ namespace AlgorithmsLibrary
 {
     public class Fourier_NotClosed : FourierDescFatherClass
     {
-        private List<MapPoint> pointCol = null;
-
-        private long m_PointNum = 0;
         private double m_totalS = 0.0;
         
         public Fourier_NotClosed(List<MapPoint> pointcollection, long nTerm)
@@ -19,21 +16,21 @@ namespace AlgorithmsLibrary
             while (true)
             {
                 bool bOK = true;
-                pointCol = pointcollection;
-                for (int i = 1; i < pointCol.Count; i++)
+                arrayOfMapPoints = pointcollection;
+                for (int i = 1; i < arrayOfMapPoints.Count; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     if (Math.Abs(p1.X - p2.X) < 0.1 && Math.Abs(p1.Y - p2.Y) < 0.1)
                     {
-                        pointCol.RemoveAt(i);
+                        arrayOfMapPoints.RemoveAt(i);
                         i--;
                         bOK = false;
                     }
                 }
                 if (bOK)
                 {
-                    m_PointNum = pointCol.Count;
+                    countOfPointsObject = arrayOfMapPoints.Count;
                     break;
                 }
             }
@@ -51,46 +48,44 @@ namespace AlgorithmsLibrary
 
         public double GetAllDist()
         {
-            m_dis_betPoint = new double[m_PointNum * 2 - 2];
-            m_accuDist = new double[m_PointNum * 2 - 1];
+            m_dis_betPoint = new double[countOfPointsObject * 2 - 2];
+            m_accuDist = new double[countOfPointsObject * 2 - 1];
 
-            for (int i = (int)m_PointNum; i < m_PointNum * 2 - 1; i++)
+            for (int i = (int)countOfPointsObject; i < countOfPointsObject * 2 - 1; i++)
             {
                 MapPoint p;
                 p = new MapPoint();
-                double X1 = pointCol[0].X;
-                double Y1 = pointCol[0].Y;
-                double X2 = pointCol[(int)m_PointNum - 1].X;
-                double Y2 = pointCol[(int)m_PointNum - 1].Y;
+                double X1 = arrayOfMapPoints[0].X;
+                double Y1 = arrayOfMapPoints[0].Y;
+                double X2 = arrayOfMapPoints[(int)countOfPointsObject - 1].X;
+                double Y2 = arrayOfMapPoints[(int)countOfPointsObject - 1].Y;
                 double A = Y2 - Y1;
                 double B = X1 - X2;
                 double C = X2 * Y1 - X1 * Y2;
-                double C_after = (A * pointCol[(int)m_PointNum * 2 - 2 - i].X + B * pointCol[(int)m_PointNum * 2 - 2 - i].Y + C) / (A * A + B * B);
-                double X_symmetry = pointCol[(int)m_PointNum * 2 - 2 - i].X - 2 * A * (C_after);
-                double Y_symmetry = pointCol[(int)m_PointNum * 2 - 2 - i].Y - 2 * B * (C_after);
+                double C_after = (A * arrayOfMapPoints[(int)countOfPointsObject * 2 - 2 - i].X + B * arrayOfMapPoints[(int)countOfPointsObject * 2 - 2 - i].Y + C) / (A * A + B * B);
+                double X_symmetry = arrayOfMapPoints[(int)countOfPointsObject * 2 - 2 - i].X - 2 * A * (C_after);
+                double Y_symmetry = arrayOfMapPoints[(int)countOfPointsObject * 2 - 2 - i].Y - 2 * B * (C_after);
                 p.X = X_symmetry;
                 p.Y = Y_symmetry;
                 //p.PutCoords(X_symmetry, Y_symmetry);
-                pointCol.Add(p);
+                arrayOfMapPoints.Add(p);
             }
 
-            for (int i = 0; i < m_PointNum * 2 - 2; i++)
+            for (int i = 0; i < countOfPointsObject * 2 - 2; i++)
             {
-                MapPoint p2 = pointCol[i + 1];
-                MapPoint p1 = pointCol[i];
-                double detx = p2.X - p1.X;
-                double dety = p2.Y - p1.Y; ;
-                double squareSum = detx * detx + dety * dety;
-                m_dis_betPoint[i] = Math.Sqrt(squareSum);
+                MapPoint p2 = arrayOfMapPoints[i + 1];
+                MapPoint p1 = arrayOfMapPoints[i];
+                
+                arrayDistancesBetweenPoints[i] = p1.DistanceToVertex(p2);
             }
             double s = 0.0;
             m_accuDist[0] = 0.0;
-            for (int i = 0; i < m_PointNum * 2 - 2; i++)
+            for (int i = 0; i < countOfPointsObject * 2 - 2; i++)
             {
-                m_accuDist[i + 1] = s + m_dis_betPoint[i];
+                m_accuDist[i + 1] = s + arrayDistancesBetweenPoints[i];
                 s = m_accuDist[i + 1];
             }
-            m_totalS = m_accuDist[m_PointNum * 2 - 2];
+            m_totalS = m_accuDist[countOfPointsObject * 2 - 2];
             return m_totalS;
         }
         public bool GetFourierXparameter()
@@ -101,10 +96,10 @@ namespace AlgorithmsLibrary
             Bx = new double[n + 1];
             Bx[0] = 0.0;
             Ax[0] = 0.0;
-            for (int i = 1; i < 2 * m_PointNum - 1; i++)
+            for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
             {
-                MapPoint p1 = pointCol[i - 1];
-                MapPoint p2 = pointCol[i];
+                MapPoint p1 = arrayOfMapPoints[i - 1];
+                MapPoint p2 = arrayOfMapPoints[i];
                 double delx = (double)(p2.X - p1.X);
                 double dels = m_accuDist[i] - m_accuDist[i - 1];
                 double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -119,10 +114,10 @@ namespace AlgorithmsLibrary
             {
                 Ax[k] = 0;
                 double angle = 2 * Math.PI * k / m_totalS;
-                for (int i = 1; i < 2 * m_PointNum - 1; i++)
+                for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.X - p1.X;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -142,10 +137,10 @@ namespace AlgorithmsLibrary
                     Ax[k] = Ax[k] + v1 + v2 + v3;
                 }
                 Bx[k] = 0;
-                for (int i = 1; i < 2 * m_PointNum - 1; i++)
+                for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.X - p1.X;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -176,10 +171,10 @@ namespace AlgorithmsLibrary
             By = new double[n + 1];
             By[0] = 0.0;
             Ay[0] = 0.0;
-            for (int i = 1; i < 2 * m_PointNum - 1; i++)
+            for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
             {
-                MapPoint p1 = pointCol[i - 1];
-                MapPoint p2 = pointCol[i];
+                MapPoint p1 = arrayOfMapPoints[i - 1];
+                MapPoint p2 = arrayOfMapPoints[i];
                 double delx = p2.Y - p1.Y;
                 double dels = m_accuDist[i] - m_accuDist[i - 1];
                 double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -194,10 +189,10 @@ namespace AlgorithmsLibrary
             {
                 Ay[k] = 0;
                 double angle = 2 * Math.PI * k / m_totalS;
-                for (int i = 1; i < 2 * m_PointNum - 1; i++)
+                for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.Y - p1.Y;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
@@ -217,10 +212,10 @@ namespace AlgorithmsLibrary
                     Ay[k] = Ay[k] + v1 + v2 + v3;
                 }
                 By[k] = 0;
-                for (int i = 1; i < 2 * m_PointNum - 1; i++)
+                for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
                 {
-                    MapPoint p1 = pointCol[i - 1];
-                    MapPoint p2 = pointCol[i];
+                    MapPoint p1 = arrayOfMapPoints[i - 1];
+                    MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.Y - p1.Y;
                     double dels = m_accuDist[i] - m_accuDist[i - 1];
                     double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
