@@ -45,8 +45,8 @@ namespace AlgorithmsLibrary
 
         public double GetAllDist()
         {
-            m_dis_betPoint = new double[countOfPointsObject * 2 - 2];
-            m_accuDist = new double[countOfPointsObject * 2 - 1];
+            arrayDistancesBetweenPoints = new double[countOfPointsObject * 2 - 2];
+            sequentialCalculationPolylineLength = new double[countOfPointsObject * 2 - 1];
 
             for (int i = (int)countOfPointsObject; i < countOfPointsObject * 2 - 1; i++)
             {
@@ -76,13 +76,13 @@ namespace AlgorithmsLibrary
                 arrayDistancesBetweenPoints[i] = p1.DistanceToVertex(p2);
             }
             double s = 0.0;
-            m_accuDist[0] = 0.0;
+            sequentialCalculationPolylineLength[0] = 0.0;
             for (int i = 0; i < countOfPointsObject * 2 - 2; i++)
             {
-                m_accuDist[i + 1] = s + arrayDistancesBetweenPoints[i];
-                s = m_accuDist[i + 1];
+                sequentialCalculationPolylineLength[i + 1] = s + arrayDistancesBetweenPoints[i];
+                s = sequentialCalculationPolylineLength[i + 1];
             }
-            m_totalS = m_accuDist[countOfPointsObject * 2 - 2];
+            m_totalS = sequentialCalculationPolylineLength[countOfPointsObject * 2 - 2];
             return m_totalS;
         }
         public bool GetFourierXparameter()
@@ -98,9 +98,9 @@ namespace AlgorithmsLibrary
                 MapPoint p1 = arrayOfMapPoints[i - 1];
                 MapPoint p2 = arrayOfMapPoints[i];
                 double delx = (double)(p2.X - p1.X);
-                double dels = m_accuDist[i] - m_accuDist[i - 1];
-                double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
-                double cc = -1.0 * delx * m_accuDist[i - 1] / dels;
+                double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
+                double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
+                double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
                 double aa = p1.X + cc;
                 double bb = delx / dels;
                 double v1 = aa * dels;
@@ -116,20 +116,20 @@ namespace AlgorithmsLibrary
                     MapPoint p1 = arrayOfMapPoints[i - 1];
                     MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.X - p1.X;
-                    double dels = m_accuDist[i] - m_accuDist[i - 1];
-                    double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
-                    double cc = -1.0 * delx * m_accuDist[i - 1] / dels;
+                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
+                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
+                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
                     double aa = p1.X + cc;
                     double bb = delx / dels;
                     double k1 = (double)k;
                     double aa1 = aa / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v1 = aa1 * delsin;
                     double bb1 = bb / Math.PI / k1;
-                    double delsinS = Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) * m_accuDist[i] - Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS) * m_accuDist[i - 1];
+                    double delsinS = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) * sequentialCalculationPolylineLength[i] - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS) * sequentialCalculationPolylineLength[i - 1];
                     double v2 = bb1 * delsinS;
                     double bb2 = bb1 * m_totalS / 2.0 / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v3 = bb2 * delcos;
                     Ax[k] = Ax[k] + v1 + v2 + v3;
                 }
@@ -139,20 +139,20 @@ namespace AlgorithmsLibrary
                     MapPoint p1 = arrayOfMapPoints[i - 1];
                     MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.X - p1.X;
-                    double dels = m_accuDist[i] - m_accuDist[i - 1];
-                    double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
-                    double cc = -1.0 * delx * m_accuDist[i - 1] / dels;
+                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
+                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
+                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
                     double aa = p1.X + cc;
                     double bb = delx / dels;
                     double k1 = (double)k;
                     double aa1 = (-1.0) * aa / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v1 = aa1 * delcos;
                     double bb1 = (-1.0) * bb / Math.PI / k1;
-                    double delcosS = Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) * m_accuDist[i] - Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS) * m_accuDist[i - 1];
+                    double delcosS = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) * sequentialCalculationPolylineLength[i] - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS) * sequentialCalculationPolylineLength[i - 1];
                     double v2 = bb1 * delcosS;
                     double bb2 = (-1.0) * bb1 * m_totalS / 2.0 / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v3 = bb2 * delsin;
                     Bx[k] = Bx[k] + v1 + v2 + v3;
                 }
@@ -173,9 +173,9 @@ namespace AlgorithmsLibrary
                 MapPoint p1 = arrayOfMapPoints[i - 1];
                 MapPoint p2 = arrayOfMapPoints[i];
                 double delx = p2.Y - p1.Y;
-                double dels = m_accuDist[i] - m_accuDist[i - 1];
-                double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
-                double cc = -1.0 * delx * m_accuDist[i - 1] / dels;
+                double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
+                double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
+                double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
                 double aa = p1.Y + cc;
                 double bb = delx / dels;
                 double v1 = aa * dels;
@@ -191,20 +191,20 @@ namespace AlgorithmsLibrary
                     MapPoint p1 = arrayOfMapPoints[i - 1];
                     MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.Y - p1.Y;
-                    double dels = m_accuDist[i] - m_accuDist[i - 1];
-                    double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
-                    double cc = -1.0 * delx * m_accuDist[i - 1] / dels;
+                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
+                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
+                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
                     double aa = p1.Y + cc;
                     double bb = delx / dels;
                     double k1 = (double)k;
                     double aa1 = aa / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v1 = aa1 * delsin;
                     double bb1 = bb / Math.PI / k1;
-                    double delsinS = Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) * m_accuDist[i] - Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS) * m_accuDist[i - 1];
+                    double delsinS = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) * sequentialCalculationPolylineLength[i] - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS) * sequentialCalculationPolylineLength[i - 1];
                     double v2 = bb1 * delsinS;
                     double bb2 = bb1 * m_totalS / 2.0 / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v3 = bb2 * delcos;
                     Ay[k] = Ay[k] + v1 + v2 + v3;
                 }
@@ -214,20 +214,20 @@ namespace AlgorithmsLibrary
                     MapPoint p1 = arrayOfMapPoints[i - 1];
                     MapPoint p2 = arrayOfMapPoints[i];
                     double delx = p2.Y - p1.Y;
-                    double dels = m_accuDist[i] - m_accuDist[i - 1];
-                    double dels2 = m_accuDist[i] * m_accuDist[i] - m_accuDist[i - 1] * m_accuDist[i - 1];
-                    double cc = -1.0 * delx * m_accuDist[i - 1] / dels;
+                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
+                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
+                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
                     double aa = p1.Y + cc;
                     double bb = delx / dels;
                     double k1 = (double)k;
                     double aa1 = (-1.0) * aa / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v1 = aa1 * delcos;
                     double bb1 = (-1.0) * bb / Math.PI / k1;
-                    double delcosS = Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) * m_accuDist[i] - Math.Cos(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS) * m_accuDist[i - 1];
+                    double delcosS = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) * sequentialCalculationPolylineLength[i] - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS) * sequentialCalculationPolylineLength[i - 1];
                     double v2 = bb1 * delcosS;
                     double bb2 = (-1.0) * bb1 * m_totalS / 2.0 / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * m_accuDist[i - 1] / m_totalS);
+                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / m_totalS) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / m_totalS);
                     double v3 = bb2 * delsin;
                     By[k] = By[k] + v1 + v2 + v3;
                 }
