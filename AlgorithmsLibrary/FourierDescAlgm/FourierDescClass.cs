@@ -8,30 +8,17 @@ namespace AlgorithmsLibrary
 {
     public class Fourier : FourierDescFatherClass
     {
-        //Набор точек
         private List<MapPoint> pointCol = null;
         //Резервный набор точек. Возмомжно не нужен....
         //private List<MapPoint> newPointCol = null;
 
         private long m_PointNum = 0;
         
-
-        //Si
-        private double[] m_accuDist = null;
-        private double[] m_dis_betPoint = null;
+        
 
         private double m_totalS = 0.0;
 
-        private double[] Ax = null;
-        private double[] Bx = null;
-        private double[] Ay = null;
-        private double[] By = null;
-       
-        
-
         private double[] Power = null;
-        
-        private double[] ratio = null;
 
         public Fourier(List<MapPoint> pointcollection, long nTerm)
         {
@@ -59,50 +46,12 @@ namespace AlgorithmsLibrary
             }
 
         }
-        public double GetAx(int index)
-        {
-            return Ax[index];
-        }
-        public double GetBx(int index)
-        {
-            return Bx[index];
-        }
-        public double GetAy(int index)
-        {
-            return Ay[index];
-        }
-        public double GetBy(int index)
-        {
-            return By[index];
-        }
-        public double GetShapeVector(int index)
-        {
-            return d[index];
-        }
-        public double GetRatio(int index)
-        {
-            return ratio[index];
-        }
-        public double[] ArrayAx()
-        {
-            return Ax;
-        }
-        public double[] ArrayBx()
-        {
-            return Bx;
-        }
-        public double[] ArrayAy()
-        {
-            return Ay;
-        }
-        public double[] ArrayBy()
-        {
-            return By;
-        }
         public double[] ArrayPower()
         {
             return Power;
         }
+
+
         public void CalculateAllValue()
         {
             GetAllDist();
@@ -365,10 +314,12 @@ namespace AlgorithmsLibrary
             return Power;
         }
 
-        public double[,] GetRecoveryPoints(long FittingPointNumber)
+        public List<MapPoint> GetRecoveryPoints(long FittingPointNumber)
         {
-            double x = Ax[0];
-            double y = Ay[0];
+            var ReturnPoints = new List<MapPoint>();
+
+            MapPoint mapPoint = new MapPoint(Ax[0], Ay[0], 1, 1);
+            
             double s = GetAllDist();
             double[] ss = new double[FittingPointNumber + 1];
             ss[0] = 0.0;
@@ -377,9 +328,6 @@ namespace AlgorithmsLibrary
             {
                 ss[i] = ss[i - 1] + s_average;
             }
-
-            double[] xx = new double[FittingPointNumber];
-            double[] yy = new double[FittingPointNumber];
 
             for (int j = 1; j < FittingPointNumber + 1; j++)
             {
@@ -391,15 +339,10 @@ namespace AlgorithmsLibrary
                     Xin += Ax[i] * Math.Cos(angle) + Bx[i] * Math.Sin(angle);
                     Yin += Ay[i] * Math.Cos(angle) + By[i] * Math.Sin(angle);
                 }
-                xx[j - 1] = Xin + x;
-                yy[j - 1] = Yin + y;
+
+                ReturnPoints.Add(new MapPoint(Xin + mapPoint.X, Yin + mapPoint.Y, j - 1, 1));
             }
-            double[,] ReturnPoints = new double[FittingPointNumber, 2];
-            for (int i = 0; i < FittingPointNumber; i++)
-            {
-                ReturnPoints[i, 0] = xx[i];
-                ReturnPoints[i, 1] = yy[i];
-            }
+
             return ReturnPoints;
         }
 
@@ -407,6 +350,7 @@ namespace AlgorithmsLibrary
         {
             double x = Ax[0];
             double y = Ay[0];
+
             double s = GetAllDist();
             double[] ss = new double[FittingPointNumber + 1];
             ss[0] = 0.0;
@@ -445,6 +389,7 @@ namespace AlgorithmsLibrary
         {
             double x = AX[0];
             double y = AY[0];
+
             double s = GetAllDist();
             double[] ss = new double[FittingPointNumber + 1];
             ss[0] = 0.0;

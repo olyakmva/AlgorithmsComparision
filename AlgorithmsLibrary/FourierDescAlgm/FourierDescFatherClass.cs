@@ -8,8 +8,29 @@ namespace AlgorithmsLibrary
 {
     public abstract class FourierDescFatherClass
     {
-        public double[] d = null;
-        public long nTerm = 0;
+        protected internal double[] d = null;
+        protected internal long nTerm = 0;
+
+        protected internal double[] ratio = null;
+
+        protected internal double[] Ax = null;
+        protected internal double[] Bx = null;
+        protected internal double[] Ay = null;
+        protected internal double[] By = null;
+
+        protected internal double[] m_accuDist = null;
+        protected internal double[] m_dis_betPoint = null;
+
+        //public double GetAx(int index) => Ax[index];
+        //public double GetBx(int index) => Bx[index];
+        //public double GetAy(int index) => Ay[index];
+        //public double GetBy(int index) => By[index];
+        //public double GetShapeVector(int index) => d[index];
+        //public double GetRatio(int index) => ratio[index];
+        //public double[] ArrayAx() => Ax;
+        //public double[] ArrayBx() => Bx;
+        //public double[] ArrayAy() => Ay;
+        //public double[] ArrayBy() => By;
 
         public double[] CalculateShapeVector(bool closed)
         {
@@ -22,7 +43,7 @@ namespace AlgorithmsLibrary
             {
                 double CX = Ax[i] + By[i];
                 double CY = Bx[i] - Ay[i];
-                dobule t = Math.Sqrt(CX * CX + CY * CY);
+                double t = Math.Sqrt(CX * CX + CY * CY);
                 D[i] = closed ? Math.Abs(t) : t;
                 sum = sum + D[i];
             }
@@ -33,6 +54,7 @@ namespace AlgorithmsLibrary
             }
             return d;
         }
+        
         public double[] CalculateEntropy2(long Number)
         {
             double[] Proportion = new double[Number];

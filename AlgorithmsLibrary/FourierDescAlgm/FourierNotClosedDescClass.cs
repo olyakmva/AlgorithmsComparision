@@ -8,25 +8,10 @@ namespace AlgorithmsLibrary
 {
     public class Fourier_NotClosed : FourierDescFatherClass
     {
-        #region After
         private List<MapPoint> pointCol = null;
-        //private IPointCollection newPointCol = null;
 
         private long m_PointNum = 0;
-
-        //Si
-        private double[] m_accuDist = null;
-        private double[] m_dis_betPoint = null;
-        
         private double m_totalS = 0.0;
-      
-        private double[] Ax = null;
-        private double[] Bx = null;
-        private double[] Ay = null;
-        private double[] By = null;
-        
-        private double[] ratio = null;
-
         
         public Fourier_NotClosed(List<MapPoint> pointcollection, long nTerm)
         {
@@ -54,46 +39,7 @@ namespace AlgorithmsLibrary
             }
 
         }
-        public double GetAx(int index)
-        {
-            return Ax[index];
-        }
-        public double GetBx(int index)
-        {
-            return Bx[index];
-        }
-        public double GetAy(int index)
-        {
-            return Ay[index];
-        }
-        public double GetBy(int index)
-        {
-            return By[index];
-        }
-        public double GetShapeVector(int index)
-        {
-            return d[index];
-        }
-        public double GetRatio(int index)
-        {
-            return ratio[index];
-        }
-        public double[] ArrayAx()
-        {
-            return Ax;
-        }
-        public double[] ArrayBx()
-        {
-            return Bx;
-        }
-        public double[] ArrayAy()
-        {
-            return Ay;
-        }
-        public double[] ArrayBy()
-        {
-            return By;
-        }
+        
         public void CalculateAllValue()
         {
             GetAllDist();
@@ -102,10 +48,9 @@ namespace AlgorithmsLibrary
             CalculateShapeVector(false);
         }
 
-        //返回总长度
+
         public double GetAllDist()
         {
-            //不闭合的曲线,点的个数m_PointNum比闭合曲线少一个,单独距离个数为m_PointNum*2-2,总距离个数为m_PointNum*2-1
             m_dis_betPoint = new double[m_PointNum * 2 - 2];
             m_accuDist = new double[m_PointNum * 2 - 1];
 
@@ -369,8 +314,9 @@ namespace AlgorithmsLibrary
             return ReturnPoints;
         }
 
-        public double[,] GetRecoveryPoints_NotClosed(long FittingPointNumber, long Fouriers)
+        public double[,] GetRecoveryPoints_NotClosed(long FittingPointNumber, bool closed, long Fouriers = 0)
         {
+            double len = closed ? Ax.Length : Fouriers + 1;
             double x = Ax[0];
             double y = Ay[0];
             double s = GetAllDist();
@@ -389,7 +335,7 @@ namespace AlgorithmsLibrary
             {
                 double Xin = 0.0;
                 double Yin = 0.0;
-                for (int i = 1; i < Fouriers + 1; i++)
+                for (int i = 1; i < len; i++)
                 {
                     double angle = 2.0 * Math.PI * (double)i * ss[j - 1] / m_totalS;
                     Xin += Ax[i] * Math.Cos(angle) + Bx[i] * Math.Sin(angle);
@@ -459,8 +405,5 @@ namespace AlgorithmsLibrary
             }
             return Entropy;
         }
-
-        
-        #endregion
     }
 }
