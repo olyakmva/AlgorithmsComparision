@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AlgorithmsLibrary;
-using DotSpatial.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SupportMapLibrary;
 
 namespace UnitTestProject1
 {
