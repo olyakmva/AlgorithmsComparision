@@ -118,8 +118,6 @@ namespace AlgorithmsLibrary
         //    m_totalS = m_accuDist[m_PointNum - 1];
         //}
 
-        
-
         public bool GetFourierXparameter()
         {
             long n = nTerm;
@@ -331,6 +329,7 @@ namespace AlgorithmsLibrary
         {
             var ReturnPoints = new List<MapPoint>();
 
+           ///починить id
             MapPoint mapPoint = new MapPoint(Ax[0], Ay[0], 1, 1);
             
             double s = GetAllDist();
