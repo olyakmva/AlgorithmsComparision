@@ -22,9 +22,8 @@ namespace MainForm
         private List<AlgParamControl> _listCtrls;
         private const byte ResultTableColumnNumber = 12;
         private readonly string _applicationPath;
-        private GaussControl _gaussControl;
-        private MapData _gaussFilterMap;
-
+       
+        
         public MainForm()
         {
             InitializeComponent();
@@ -39,41 +38,50 @@ namespace MainForm
         {
             int x = 0, y = 55, ctrlHeight = 140;
             _listCtrls = new List<AlgParamControl>();
-            AlgParamControl douglasCtrl = new AlgParamControl()
-            {
-                Location = new Point(x, y),
-                AlgmName = "DouglasPeuckerAlgm"
-            };
-            _listCtrls.Add(douglasCtrl);
-            y += ctrlHeight;
-            AlgParamControl liCtrl = new AlgParamControl()
-            {
-                AlgmName = "LiOpenshawAlgm",
-                Location = new Point(x, y)
-            };
-            _listCtrls.Add(liCtrl);
-            y += ctrlHeight;
-            AlgParamControl visvWhyatCtrl = new AlgParamControl()
-            {
-                AlgmName = "VisvWhyattAlgm",
-                Location = new Point(x, y)
-            };
-            y += ctrlHeight;
-            _listCtrls.Add(visvWhyatCtrl);
-
-            AlgParamControl sleeveFitCtrl = new AlgParamControl()
-            {
-                AlgmName = "SleeveFitAlgm",
-                Location = new Point(x, y)
-            };
-            y += ctrlHeight;
-            _listCtrls.Add(sleeveFitCtrl);
 
             
-            mainContainer.Panel1.Controls .Add(douglasCtrl);
-            mainContainer.Panel1.Controls.Add(liCtrl);
-            mainContainer.Panel1 .Controls.Add(visvWhyatCtrl);
-            mainContainer .Panel1.Controls.Add(sleeveFitCtrl);
+            AlgParamControl fourierCtrl = new AlgParamControl()
+            {
+                Location = new Point(x, y),
+                AlgmName = "FourierDesAlgm"
+            };
+            _listCtrls.Add(fourierCtrl);
+            y += ctrlHeight;
+            //AlgParamControl douglasCtrl = new AlgParamControl()
+            //{
+            //    Location = new Point(x, y),
+            //    AlgmName = "DouglasPeuckerAlgm"
+            //};
+            //_listCtrls.Add(douglasCtrl);
+            //y += ctrlHeight;
+            //AlgParamControl liCtrl = new AlgParamControl()
+            //{
+            //    AlgmName = "LiOpenshawAlgm",
+            //    Location = new Point(x, y)
+            //};
+            //_listCtrls.Add(liCtrl);
+            //y += ctrlHeight;
+            //AlgParamControl visvWhyatCtrl = new AlgParamControl()
+            //{
+            //    AlgmName = "VisvWhyattAlgm",
+            //    Location = new Point(x, y)
+            //};
+            //y += ctrlHeight;
+            //_listCtrls.Add(visvWhyatCtrl);
+
+            //AlgParamControl sleeveFitCtrl = new AlgParamControl()
+            //{
+            //    AlgmName = "SleeveFitAlgm",
+            //    Location = new Point(x, y)
+            //};
+            //y += ctrlHeight;
+            //_listCtrls.Add(sleeveFitCtrl);
+
+             mainContainer.Panel1.Controls .Add(fourierCtrl);
+            //mainContainer.Panel1.Controls .Add(douglasCtrl);
+            //mainContainer.Panel1.Controls.Add(liCtrl);
+            //mainContainer.Panel1 .Controls.Add(visvWhyatCtrl);
+            //mainContainer .Panel1.Controls.Add(sleeveFitCtrl);
            
 
             foreach (var ctrl in _listCtrls)
@@ -87,10 +95,10 @@ namespace MainForm
             }
          
             btnProcess.Location = new Point(x,y);
-            y += 43;
-            _gaussControl = new GaussControl {Location = new Point(x, y)};
-            mainContainer.Panel1.Controls.Add(_gaussControl);
-            btnFilter.Location = new Point(x, y+65);
+            //y += 43;
+            //_gaussControl = new GaussControl {Location = new Point(x, y)};
+            //mainContainer.Panel1.Controls.Add(_gaussControl);
+            //btnFilter.Location = new Point(x, y+65);
 
 
         }
@@ -361,10 +369,7 @@ namespace MainForm
                 }
                 l.Characteristics.Length = Math.Round(l.Characteristics.Length / _layers[0].Characteristics.Length, 2);
 
-                if (_gaussFilterMap != null)
-                {
-                    l.FilterModifHausdDistance = GenHausdorfDistance.Get(_gaussFilterMap, map);
-                }
+               
                 _layers.Add(l);
                 AddNewRowToResultTable(l);
             }
@@ -403,19 +408,7 @@ namespace MainForm
             }
         }
 
-        private void BtnFilterClick(object sender, EventArgs e)
-        {
-               var filter  = new FilterLine(_gaussControl.PointNumber, _gaussControl.Sampling);
-               var map = _inputMap.Clone();
-                _gaussFilterMap = filter.Process(map);
-            var layer = new Layer(map, "GaussFilter", 0)
-            {
-                GenHausdDist = GenHausdorfDistance.Get(_inputMap, _gaussFilterMap)
-            };
-            _layers.Add(layer);
-                AddNewRowToResultTable(layer);
-            mapPictureBox.Invalidate();
-        }
+        
     }
 
     public class GraphicsState

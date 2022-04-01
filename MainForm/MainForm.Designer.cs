@@ -37,7 +37,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResultTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainContainer = new System.Windows.Forms.SplitContainer();
-            this.btnFilter = new System.Windows.Forms.Button();
             this.lblPercentError = new System.Windows.Forms.Label();
             this.percentErrUpDn = new System.Windows.Forms.NumericUpDown();
             this.btnProcess = new System.Windows.Forms.Button();
@@ -99,40 +98,40 @@
             this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
             this.aboutToolStripMenuItem.Text = "About";
             // 
             // saveResultTableToolStripMenuItem
             // 
             this.saveResultTableToolStripMenuItem.Name = "saveResultTableToolStripMenuItem";
-            this.saveResultTableToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
+            this.saveResultTableToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
             this.saveResultTableToolStripMenuItem.Text = "Save result table";
             this.saveResultTableToolStripMenuItem.Click += new System.EventHandler(this.SaveResultTableToolStripMenuItemClick);
             // 
@@ -148,7 +147,6 @@
             // 
             this.mainContainer.Panel1.AutoScroll = true;
             this.mainContainer.Panel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.mainContainer.Panel1.Controls.Add(this.btnFilter);
             this.mainContainer.Panel1.Controls.Add(this.lblPercentError);
             this.mainContainer.Panel1.Controls.Add(this.percentErrUpDn);
             this.mainContainer.Panel1.Controls.Add(this.btnProcess);
@@ -164,17 +162,6 @@
             this.mainContainer.Size = new System.Drawing.Size(1347, 710);
             this.mainContainer.SplitterDistance = 251;
             this.mainContainer.TabIndex = 1;
-            // 
-            // btnFilter
-            // 
-            this.btnFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnFilter.Location = new System.Drawing.Point(0, 474);
-            this.btnFilter.Name = "btnFilter";
-            this.btnFilter.Size = new System.Drawing.Size(252, 32);
-            this.btnFilter.TabIndex = 8;
-            this.btnFilter.Text = "GetFilter";
-            this.btnFilter.UseVisualStyleBackColor = true;
-            this.btnFilter.Click += new System.EventHandler(this.BtnFilterClick);
             // 
             // lblPercentError
             // 
@@ -551,7 +538,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnFilter;
     }
 }
 

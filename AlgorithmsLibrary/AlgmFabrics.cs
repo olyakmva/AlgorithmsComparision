@@ -38,6 +38,9 @@ namespace AlgorithmsLibrary
                     else if (isBend) algm = new WangMullerWithCriterion(new BendNumberCriterion());
                     else algm = new WangMullerAlgm();
                     break;
+                case "FourierDesAlgm":
+                    algm= new  FourierDescAlgm();
+                    break;
             }
             return algm;
 
