@@ -19,18 +19,24 @@ namespace AlgorithmsLibrary
             
             if (chain[startIndex].Equals(chain[endIndex]))
             {
-                Fourier fourier = new Fourier(chain, 100);
+                Fourier fourier = new Fourier(chain, 1000); //fourier length
 
                 double Dist = fourier.GetAllDist();
                 fourier.GetFourierXparameter();
                 fourier.GetFourierYparameter();
 
-                var t = fourier.GetRecoveryPoints(chain.Count);
+                long fitt = (long)(chain.Count * 0.05); //output points
+                var t = fourier.GetRecoveryPoints(fitt);
 
-                for (int i =0; i < chain.Count; i++)
+                for (int i =0; i < fitt; i++)
                 {
                     chain[i].X = t[i].X;
                     chain[i].Y = t[i].Y;
+                }
+
+                while (chain.Count > fitt)
+                {
+                    chain.RemoveAt(chain.Count - 1);    
                 }
             }
             else
