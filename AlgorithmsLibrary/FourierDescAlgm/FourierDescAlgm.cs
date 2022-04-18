@@ -5,9 +5,6 @@ namespace AlgorithmsLibrary
     public class FourierDescAlgm : ISimplificationAlgm
     {
         public SimplificationAlgmParameters Options { get; set; }
-        long F = 32;
-        long preFourier = 32 + 5;
-
         public virtual void Run(MapData map)
         {
             foreach (var chain in map.VertexList)
@@ -19,44 +16,39 @@ namespace AlgorithmsLibrary
 
         private void Run(List<MapPoint> chain, int startIndex, int endIndex)
         {
+            
             if (chain[startIndex].Equals(chain[endIndex]))
             {
-                Fourier fourier = new Fourier(chain, preFourier);
+                Fourier fourier = new Fourier(chain, 100);
 
                 double Dist = fourier.GetAllDist();
                 fourier.GetFourierXparameter();
                 fourier.GetFourierYparameter();
-                double[] vector = fourier.CalculateShapeVector(true);
-                double[] Ax = fourier.Ax;
-                double[] Ay = fourier.Ay;
-                double[] Bx = fourier.Bx;
-                double[] By = fourier.By;
-                long A = vector.Length;
 
-                //CalculateInformation
-                double All_Information = default(double);
-                int EntropyLength = fourier.CalculateEntropy2(F).Length;
-                double[] CalculateEntropy = fourier.CalculateEntropy2(F);
-                for (int i = 0; i < F; i++)
-                {
-                    All_Information += CalculateEntropy[i];
-                }
-                double temp;
-                double[] order = CalculateEntropy;
-                for (int i = 0; i < order.Length; i++)
-                {
-                    for (int j = i + 1; j < order.Length; j++)
-                    {
-                        if (order[j] > order[i])
-                        {
-                            temp = order[j];
-                            order[j] = order[i];
-                            order[i] = temp;
-                        }
-                    }
-                }
+                var t = fourier.GetRecoveryPoints(chain.Count);
 
-                
+                for (int i =0; i < chain.Count; i++)
+                {
+                    chain[i].X = t[i].X;
+                    chain[i].Y = t[i].Y;
+                }
+            }
+            else
+            {
+                Fourier_NotClosed fourier = new Fourier_NotClosed(chain, 100);
+
+                double Dist = fourier.GetAllDist();
+                fourier.GetFourierXparameter();
+                fourier.GetFourierYparameter();
+
+                var t = fourier.GetRecoveryPoints(chain.Count, fourier.Ax.Length);
+
+                int k = t.Length / 2;
+                chain.Clear();
+                for (int i = 0; i < k; i++)
+                {
+                    chain.Add(new MapPoint { X = t[i, 0], Y = t[i, 1] });
+                }
             }
         }
     }

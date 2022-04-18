@@ -56,29 +56,29 @@ namespace AlgorithmsLibrary
             return d;
         }
         
-        public double[] CalculateEntropy2(long Number)
-        {
-            double[] Proportion = new double[Number];
+        //public double[] CalculateEntropy2(long Number)
+        //{
+        //    double[] Proportion = new double[Number];
 
-            double d_sum = default(double);
+        //    double d_sum = default(double);
 
-            for (int i = 0; i < Proportion.Length; i++)
-            {
-                d_sum += d[i + 1];
-            }
+        //    for (int i = 0; i < Proportion.Length; i++)
+        //    {
+        //        d_sum += d[i + 1];
+        //    }
 
-            for (int i = 0; i < Proportion.Length; i++)
-            {
-                Proportion[i] = d[i + 1] / d_sum;
-            }
+        //    for (int i = 0; i < Proportion.Length; i++)
+        //    {
+        //        Proportion[i] = d[i + 1] / d_sum;
+        //    }
 
-            double[] Entropy = new double[Proportion.Length];
-            for (int i = 0; i < Entropy.Length; i++)
-            {
-                Entropy[i] = -Proportion[i] * Math.Log(Proportion[i], 2);
-            }
-            return Entropy;
-        }
+        //    double[] Entropy = new double[Proportion.Length];
+        //    for (int i = 0; i < Entropy.Length; i++)
+        //    {
+        //        Entropy[i] = -Proportion[i] * Math.Log(Proportion[i], 2);
+        //    }
+        //    return Entropy;
+        //}
 
         
 

@@ -288,7 +288,7 @@ namespace AlgorithmsLibrary
             {
                 double Xin = 0.0;
                 double Yin = 0.0;
-                for (int i = 1; i < Fouriers + 1; i++)
+                for (int i = 1; i < Fouriers; i++)
                 {
                     double angle = 2.0 * Math.PI * (double)i * ss[j - 1] / m_totalS;
                     Xin += Ax[i] * Math.Cos(angle) + Bx[i] * Math.Sin(angle);
