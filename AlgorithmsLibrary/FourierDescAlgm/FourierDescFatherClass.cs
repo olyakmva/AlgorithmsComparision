@@ -167,5 +167,33 @@ namespace AlgorithmsLibrary
 
             return YParameter;
         }
+
+        public List<MapPoint> GetRecoveryPoints(long OutputPointCount)
+        {
+            var RecoveryPoints = new List<MapPoint>();
+
+            GetAllDist();
+            double[] ss = new double[OutputPointCount + 1];
+            double s_average = polyLineLength / (double)OutputPointCount;
+            for (int i = 1; i < OutputPointCount; i++)
+            {
+                ss[i] = ss[i - 1] + s_average;
+            }
+
+            for (int j = 1; j < OutputPointCount + 1; j++)
+            {
+                double Xin = 0.0, Yin = 0.0;
+                for (int i = 1; i < fourierSeriesLength + 1; i++)
+                {
+                    double angle = 2.0 * Math.PI * (double)i * ss[j - 1] / polyLineLength;
+                    Xin += XParameter[i, 0] * Math.Cos(angle) + XParameter[i, 1] * Math.Sin(angle);
+                    Yin += YParameter[i, 0] * Math.Cos(angle) + YParameter[i, 1] * Math.Sin(angle);
+                }
+
+                RecoveryPoints.Add(new MapPoint(Xin + XParameter[0, 0], Yin + YParameter[0, 0], j - 1, 1));
+            }
+
+            return RecoveryPoints;
+        }
     }
 }
