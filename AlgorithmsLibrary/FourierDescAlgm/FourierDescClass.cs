@@ -65,7 +65,6 @@ namespace AlgorithmsLibrary
             int basePointCount = arrayOfMapPoints.Count;
             for (int i = basePointCount; i < countOfPointsObject; i++)
             {
-                MapPoint p = new MapPoint();
                 double X1 = arrayOfMapPoints[0].X;
                 double Y1 = arrayOfMapPoints[0].Y;
                 double X2 = arrayOfMapPoints[basePointCount - 1].X;
@@ -76,9 +75,8 @@ namespace AlgorithmsLibrary
                 double C_after = (A * arrayOfMapPoints[countOfPointsObject - 1 - i].X + B * arrayOfMapPoints[countOfPointsObject - 1 - i].Y + C) / (A * A + B * B);
                 double X_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].X - 2 * A * C_after;
                 double Y_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].Y - 2 * B * C_after;
-                p.X = X_symmetry;
-                p.Y = Y_symmetry;
-                arrayOfMapPoints.Add(p);
+
+                arrayOfMapPoints.Add(new MapPoint { X = X_symmetry, Y = Y_symmetry });
             }
         }
 
@@ -254,13 +252,12 @@ namespace AlgorithmsLibrary
             return YParameter;
         }
 
-        public List<MapPoint> GetRecoveryPoints(long OutputPointCount)
+        public List<MapPoint> GetRecoveryPoints(int OutputPointCount)
         {
             var RecoveryPoints = new List<MapPoint>();
 
-            GetAllDist();
             double[] ss = new double[OutputPointCount + 1];
-            double s_average = polyLineLength / (double)OutputPointCount;
+            double s_average = polyLineLength / OutputPointCount;
             for (int i = 1; i < OutputPointCount; i++)
             {
                 ss[i] = ss[i - 1] + s_average;
@@ -271,12 +268,12 @@ namespace AlgorithmsLibrary
                 double Xin = 0.0, Yin = 0.0;
                 for (int i = 1; i < fourierSeriesLength + 1; i++)
                 {
-                    double angle = 2.0 * Math.PI * (double)i * ss[j - 1] / polyLineLength;
+                    double angle = 2.0 * Math.PI * i * ss[j - 1] / polyLineLength;
                     Xin += XParameter[i, 0] * Math.Cos(angle) + XParameter[i, 1] * Math.Sin(angle);
                     Yin += YParameter[i, 0] * Math.Cos(angle) + YParameter[i, 1] * Math.Sin(angle);
                 }
 
-                RecoveryPoints.Add(new MapPoint(Xin + XParameter[0, 0], Yin + YParameter[0, 0], j - 1, 1));
+                RecoveryPoints.Add(new MapPoint { X = Xin + XParameter[0, 0], Y = Yin + YParameter[0, 0] });
             }
 
             return RecoveryPoints;

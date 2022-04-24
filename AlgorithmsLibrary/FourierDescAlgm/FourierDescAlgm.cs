@@ -36,7 +36,9 @@ namespace AlgorithmsLibrary
                     chain[i].Y = outputs[i].Y;
                 }
 
-                while (chain.Count > outputPointCount)
+                chain[outputPointCount] = new MapPoint { X = chain[0].X, Y = chain[0].Y };
+
+                while (chain.Count > outputPointCount + 1)
                 {
                     chain.RemoveAt(chain.Count - 1);
                 }
@@ -49,13 +51,14 @@ namespace AlgorithmsLibrary
                 fourier.GetFourierXparameter();
                 fourier.GetFourierYparameter();
 
-                var t = fourier.GetRecoveryPoints(chain.Count);
+                int outputPointCount = chain.Count * OUTPUT_PERCENT_POINTS / 100;
+                var outputs = fourier.GetRecoveryPoints(outputPointCount);
 
-                int k = t.Count / 2;
+                int k = outputs.Count / 2;
                 chain.Clear();
                 for (int i = 0; i < k; i++)
                 {
-                    chain.Add(new MapPoint { X = t[i].X, Y = t[i].Y });
+                    chain.Add(new MapPoint { X = outputs[i].X, Y = outputs[i].Y });
                 }
             }
         }
