@@ -5,10 +5,6 @@ namespace AlgorithmsLibrary
 {
     public class FourierNotClosed : FourierDescFatherClass
     {
-        private double polyLineLength = 0.0;
-        private long fourierSeriesLength;
-        private double[,] XParameter;
-        private double[,] YParameter;
         public FourierNotClosed(List<MapPoint> mapPoints, long fourierSeriesLength, double approximationRatio)
         {
             this.fourierSeriesLength = fourierSeriesLength;
@@ -38,15 +34,7 @@ namespace AlgorithmsLibrary
             YParameter = new double[fourierSeriesLength + 1, 2];
         }
 
-        public void CalculateAllValue()
-        {
-            GetAllDist();
-            GetFourierXparameter();
-            GetFourierYparameter();
-            //CalculateShapeVector();
-        }
-
-        public void GetAllDist()
+        public override void GetAllDist()
         {
             arrayDistancesBetweenPoints = new double[countOfPointsObject * 2 - 2];
             sequentialCalculationPolylineLength = new double[countOfPointsObject * 2 - 1];
@@ -87,10 +75,11 @@ namespace AlgorithmsLibrary
             polyLineLength = sequentialCalculationPolylineLength[countOfPointsObject * 2 - 2];
         }
 
-        public bool GetFourierXparameter()
+        public override double[,] GetFourierXparameter()
         {
             if (fourierSeriesLength <= 0)
-                return false;
+                return null;
+
             for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
             {
                 MapPoint p1 = arrayOfMapPoints[i - 1];
@@ -105,6 +94,7 @@ namespace AlgorithmsLibrary
                 double v2 = bb / 2 * dels2;
                 XParameter[0, 0] += v1 / polyLineLength + v2 / polyLineLength;
             }
+
             for (int k = 1; k < fourierSeriesLength + 1; k++)
             {
                 double angle = 2 * Math.PI * k / polyLineLength;
@@ -155,12 +145,12 @@ namespace AlgorithmsLibrary
                 }
             }
 
-            return true;
+            return XParameter;
         }
-        public bool GetFourierYparameter()
+        public override double[,] GetFourierYparameter()
         {
             if (fourierSeriesLength <= 0)
-                return false;
+                return null;
 
             for (int i = 1; i < 2 * countOfPointsObject - 1; i++)
             {
@@ -176,6 +166,7 @@ namespace AlgorithmsLibrary
                 double v2 = bb / 2 * dels2;
                 YParameter[0, 0] += v1 / polyLineLength + v2 / polyLineLength;
             }
+
             for (int k = 1; k < fourierSeriesLength + 1; k++)
             {
                 double angle = 2 * Math.PI * k / polyLineLength;
@@ -225,7 +216,8 @@ namespace AlgorithmsLibrary
                     YParameter[k, 1] += v1 + v2 + v3;
                 }
             }
-            return true;
+
+            return YParameter;
         }
 
         public List<MapPoint> GetRecoveryPoints(long OutputPointCount)
@@ -255,42 +247,5 @@ namespace AlgorithmsLibrary
 
             return RecoveryPoints;
         }
-
-        //public double[] CalculateEntropy()
-        //{
-        //    double[] Proportion = new double[d.Length - 1];
-        //    for (int i = 0; i < Proportion.Length; i++)
-        //    {
-        //        Proportion[i] = d[i + 1];
-        //    }
-
-        //    double[] Entropy = new double[Proportion.Length];
-        //    for (int i = 0; i < Entropy.Length; i++)
-        //    {
-        //        Entropy[i] = -Proportion[i] * Math.Log(Proportion[i], 2);
-        //    }
-        //    return Entropy;
-        //}
-
-        //public double[] CalculateShapeVector()
-        //{
-        //    double[] D = new double[fourierSeriesLength + 1];
-        //    var d = new double[fourierSeriesLength];
-        //    var ratio = new double[fourierSeriesLength];
-        //    double sum = 0;
-        //    for (int i = 1; i < fourierSeriesLength + 1; i++)
-        //    {
-        //        double CX = XParameter[i, 0] + YParameter[i, 1];
-        //        double CY = XParameter[i, 1] - YParameter[i, 0];
-        //        D[i] = Math.Sqrt(CX * CX + CY * CY);
-        //        sum += D[i];
-        //    }
-        //    for (int i = 1; i < fourierSeriesLength + 1; i++)
-        //    {
-        //        ratio[i - 1] = D[i] / sum;
-        //        d[i - 1] = D[i] / D[1];
-        //    }
-        //    return d;
-        //}
     }
 }
