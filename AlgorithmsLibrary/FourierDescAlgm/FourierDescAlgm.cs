@@ -14,46 +14,48 @@ namespace AlgorithmsLibrary
             }
         }
 
+        private const int OUTPUT_PERCENT_POINTS = 50;
+        private const int FOURIER_SERIES_LENGTH = 500;
+        private const double APPROXIMATION_RATIO = 0.1;
         private void Run(List<MapPoint> chain, int startIndex, int endIndex)
         {
-            
             if (chain[startIndex].Equals(chain[endIndex]))
             {
-                Fourier fourier = new Fourier(chain, 1000); //fourier length
+                Fourier fourier = new Fourier(chain, FOURIER_SERIES_LENGTH, APPROXIMATION_RATIO); 
 
-                double Dist = fourier.GetAllDist();
+                fourier.GetAllDist();
                 fourier.GetFourierXparameter();
                 fourier.GetFourierYparameter();
 
-                long fitt = (long)(chain.Count * 0.05); //output points
-                var t = fourier.GetRecoveryPoints(fitt);
+                int outputPointCount = chain.Count * OUTPUT_PERCENT_POINTS / 100; 
+                var outputs = fourier.GetRecoveryPoints(outputPointCount);
 
-                for (int i =0; i < fitt; i++)
+                for (int i = 0; i < outputPointCount; i++)
                 {
-                    chain[i].X = t[i].X;
-                    chain[i].Y = t[i].Y;
+                    chain[i].X = outputs[i].X;
+                    chain[i].Y = outputs[i].Y;
                 }
 
-                while (chain.Count > fitt)
+                while (chain.Count > outputPointCount)
                 {
-                    chain.RemoveAt(chain.Count - 1);    
+                    chain.RemoveAt(chain.Count - 1);
                 }
             }
             else
             {
-                Fourier_NotClosed fourier = new Fourier_NotClosed(chain, 100);
+                FourierNotClosed fourier = new FourierNotClosed(chain, FOURIER_SERIES_LENGTH, APPROXIMATION_RATIO);
 
-                double Dist = fourier.GetAllDist();
+                fourier.GetAllDist();
                 fourier.GetFourierXparameter();
                 fourier.GetFourierYparameter();
 
-                var t = fourier.GetRecoveryPoints(chain.Count, fourier.Ax.Length);
+                var t = fourier.GetRecoveryPoints(chain.Count);
 
-                int k = t.Length / 2;
+                int k = t.Count / 2;
                 chain.Clear();
                 for (int i = 0; i < k; i++)
                 {
-                    chain.Add(new MapPoint { X = t[i, 0], Y = t[i, 1] });
+                    chain.Add(new MapPoint { X = t[i].X, Y = t[i].Y });
                 }
             }
         }

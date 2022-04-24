@@ -42,7 +42,7 @@ namespace UnitTestProject1
             Fourier fourier = new Fourier(list, 0);
 
             double expected = 6;
-            double actual = fourier.GetAllDist();
+            double actual = fourier.CalculateTotalDist();
 
             Assert.AreEqual(expected, actual);
         }
@@ -56,7 +56,7 @@ namespace UnitTestProject1
             Fourier fourier = new Fourier(list, 0);
 
             double expected = 4;
-            double actual = fourier.GetAllDist();
+            double actual = fourier.CalculateTotalDist();
 
             Assert.AreEqual(expected, actual);
         }
