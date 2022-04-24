@@ -71,8 +71,6 @@
     <Compile Include="Features\TripletComputation.cs" />
     <Compile Include="FourierDescAlgm\FourierDescAlgm.cs" />
     <Compile Include="FourierDescAlgm\FourierDescClass.cs" />
-    <Compile Include="FourierDescAlgm\FourierDescFatherClass.cs" />
-    <Compile Include="FourierDescAlgm\FourierNotClosedDescClass.cs" />
     <Compile Include="FourierDescAlgm\LineSegmentClass.cs" />
     <Compile Include="FourierDescAlgm\PolygonClass.cs" />
     <Compile Include="FourierDescAlgm\ShapeAnalysysClass.cs" />
@@ -88,9 +86,7 @@
     <Compile Include="SleeveFitAlgm.cs" />
     <Compile Include="VisWhyattAlgm.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FourierDescAlgm\Elements\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

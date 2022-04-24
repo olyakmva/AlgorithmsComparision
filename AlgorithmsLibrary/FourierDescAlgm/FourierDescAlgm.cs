@@ -21,7 +21,7 @@ namespace AlgorithmsLibrary
         {
             if (chain[startIndex].Equals(chain[endIndex]))
             {
-                Fourier fourier = new Fourier(chain, FOURIER_SERIES_LENGTH, APPROXIMATION_RATIO); 
+                Fourier fourier = new Fourier(chain, FOURIER_SERIES_LENGTH, APPROXIMATION_RATIO, true); 
 
                 fourier.GetAllDist();
                 fourier.GetFourierXparameter();
@@ -43,7 +43,7 @@ namespace AlgorithmsLibrary
             }
             else
             {
-                FourierNotClosed fourier = new FourierNotClosed(chain, FOURIER_SERIES_LENGTH, APPROXIMATION_RATIO);
+                Fourier fourier = new Fourier(chain, FOURIER_SERIES_LENGTH, APPROXIMATION_RATIO, false);
 
                 fourier.GetAllDist();
                 fourier.GetFourierXparameter();
