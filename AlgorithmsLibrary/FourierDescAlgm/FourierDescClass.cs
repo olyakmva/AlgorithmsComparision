@@ -63,20 +63,14 @@ namespace AlgorithmsLibrary
         private void AddSymmetricPolyline()
         {
             int basePointCount = arrayOfMapPoints.Count;
+            MapPoint startPoint = arrayOfMapPoints[0];
+            MapPoint endPoint = arrayOfMapPoints[basePointCount - 1];
+            Line SymmetryAxis = new Line(startPoint, endPoint);
+            
             for (int i = basePointCount; i < countOfPointsObject; i++)
             {
-                double X1 = arrayOfMapPoints[0].X;
-                double Y1 = arrayOfMapPoints[0].Y;
-                double X2 = arrayOfMapPoints[basePointCount - 1].X;
-                double Y2 = arrayOfMapPoints[basePointCount - 1].Y;
-                double A = Y2 - Y1;
-                double B = X1 - X2;
-                double C = X2 * Y1 - X1 * Y2;
-                double C_after = (A * arrayOfMapPoints[countOfPointsObject - 1 - i].X + B * arrayOfMapPoints[countOfPointsObject - 1 - i].Y + C) / (A * A + B * B);
-                double X_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].X - 2 * A * C_after;
-                double Y_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].Y - 2 * B * C_after;
-
-                arrayOfMapPoints.Add(new MapPoint { X = X_symmetry, Y = Y_symmetry });
+                MapPoint SymmetryPoint = SymmetryAxis.GetSymmetricPoint(arrayOfMapPoints[countOfPointsObject - 1 - i]);
+                arrayOfMapPoints.Add(SymmetryPoint);
             }
         }
 

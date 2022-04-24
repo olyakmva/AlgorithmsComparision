@@ -371,6 +371,17 @@ namespace AlgorithmsLibrary
             return line;
         }
 
+        public MapPoint GetSymmetricPoint(MapPoint other)
+        {
+            var result = new MapPoint();
+            MapPoint PerpendicularFoundationPoint = GetPerpendicularFoundationPoint(other);
+
+            result.X = 2 * PerpendicularFoundationPoint.X - other.X;  
+            result.Y = 2 * PerpendicularFoundationPoint.Y - other.Y;
+
+            return result;
+        }
+
     }
 
 }
