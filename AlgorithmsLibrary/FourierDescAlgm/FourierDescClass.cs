@@ -5,19 +5,19 @@ namespace AlgorithmsLibrary
 {
     public class Fourier
     {
-        private double polyLineLength = 0.0;
-        private long fourierSeriesLength;
+        private double polyLineLength;
+        private int fourierSeriesLength;
         private double[,] XParameter;
         private double[,] YParameter;
 
         private List<MapPoint> arrayOfMapPoints = null;
-        private int countOfPointsObject = 0;
+        private int countOfPointsObject;
         private double[] sequentialCalculationPolylineLength = null;
         private double[] arrayDistancesBetweenPoints = null;
 
         private bool FourierClosedType;
 
-        public Fourier(List<MapPoint> mapPoints, long fourierSeriesLength, double approximationRatio, bool FourierClosedType)
+        public Fourier(List<MapPoint> mapPoints, int fourierSeriesLength, double approximationRatio, bool FourierClosedType)
         {
             this.FourierClosedType = FourierClosedType;
             this.fourierSeriesLength = fourierSeriesLength;
@@ -49,6 +49,8 @@ namespace AlgorithmsLibrary
 
             XParameter = new double[fourierSeriesLength + 1, 2];
             YParameter = new double[fourierSeriesLength + 1, 2];
+
+            polyLineLength = 0.0;
         }
 
         public void CalculateAllValue()
@@ -56,6 +58,55 @@ namespace AlgorithmsLibrary
             GetAllDist();
             GetFourierXparameter();
             GetFourierYparameter();
+        }
+
+        private void AddSymmetricPolyline()
+        {
+            int basePointCount = arrayOfMapPoints.Count;
+            for (int i = basePointCount; i < countOfPointsObject; i++)
+            {
+                MapPoint p = new MapPoint();
+                double X1 = arrayOfMapPoints[0].X;
+                double Y1 = arrayOfMapPoints[0].Y;
+                double X2 = arrayOfMapPoints[basePointCount - 1].X;
+                double Y2 = arrayOfMapPoints[basePointCount - 1].Y;
+                double A = Y2 - Y1;
+                double B = X1 - X2;
+                double C = X2 * Y1 - X1 * Y2;
+                double C_after = (A * arrayOfMapPoints[countOfPointsObject - 1 - i].X + B * arrayOfMapPoints[countOfPointsObject - 1 - i].Y + C) / (A * A + B * B);
+                double X_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].X - 2 * A * C_after;
+                double Y_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].Y - 2 * B * C_after;
+                p.X = X_symmetry;
+                p.Y = Y_symmetry;
+                arrayOfMapPoints.Add(p);
+            }
+        }
+
+        public void GetAllDist()
+        {
+            arrayDistancesBetweenPoints = new double[countOfPointsObject - 1];
+            sequentialCalculationPolylineLength = new double[countOfPointsObject];
+
+            if (!FourierClosedType)
+                AddSymmetricPolyline();
+
+            for (int i = 0; i < countOfPointsObject - 1; i++)
+            {
+                MapPoint p2 = arrayOfMapPoints[i + 1];
+                MapPoint p1 = arrayOfMapPoints[i];
+
+                arrayDistancesBetweenPoints[i] = p1.DistanceToVertex(p2);
+            }
+
+            double tmpDist = 0.0;
+            sequentialCalculationPolylineLength[0] = 0.0;
+            for (int i = 0; i < countOfPointsObject - 1; i++)
+            {
+                sequentialCalculationPolylineLength[i + 1] = tmpDist + arrayDistancesBetweenPoints[i];
+                tmpDist = sequentialCalculationPolylineLength[i + 1];
+            }
+
+            polyLineLength = sequentialCalculationPolylineLength[countOfPointsObject - 1];
         }
 
         public double[,] GetFourierXparameter()
@@ -229,56 +280,6 @@ namespace AlgorithmsLibrary
             }
 
             return RecoveryPoints;
-        }
-
-        private void AddSymmetricPolyline()
-        {
-            int basePointCount = arrayOfMapPoints.Count;
-            for (int i = basePointCount; i < countOfPointsObject; i++)
-            {
-                MapPoint p;
-                p = new MapPoint();
-                double X1 = arrayOfMapPoints[0].X;
-                double Y1 = arrayOfMapPoints[0].Y;
-                double X2 = arrayOfMapPoints[basePointCount - 1].X;
-                double Y2 = arrayOfMapPoints[basePointCount - 1].Y;
-                double A = Y2 - Y1;
-                double B = X1 - X2;
-                double C = X2 * Y1 - X1 * Y2;
-                double C_after = (A * arrayOfMapPoints[countOfPointsObject - 1 - i].X + B * arrayOfMapPoints[countOfPointsObject - 1 - i].Y + C) / (A * A + B * B);
-                double X_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].X - 2 * A * C_after;
-                double Y_symmetry = arrayOfMapPoints[countOfPointsObject - 1 - i].Y - 2 * B * C_after;
-                p.X = X_symmetry;
-                p.Y = Y_symmetry;
-                arrayOfMapPoints.Add(p);
-            }
-        }
-
-        public void GetAllDist()
-        {
-            arrayDistancesBetweenPoints = new double[countOfPointsObject - 1];
-            sequentialCalculationPolylineLength = new double[countOfPointsObject];
-
-            if (!FourierClosedType)
-                AddSymmetricPolyline();
-
-            for (int i = 0; i < countOfPointsObject - 1; i++)
-            {
-                MapPoint p2 = arrayOfMapPoints[i + 1];
-                MapPoint p1 = arrayOfMapPoints[i];
-
-                arrayDistancesBetweenPoints[i] = p1.DistanceToVertex(p2);
-            }
-
-            double tmpDist = 0.0;
-            sequentialCalculationPolylineLength[0] = 0.0;
-            for (int i = 0; i < countOfPointsObject - 1; i++)
-            {
-                sequentialCalculationPolylineLength[i + 1] = tmpDist + arrayDistancesBetweenPoints[i];
-                tmpDist = sequentialCalculationPolylineLength[i + 1];
-            }
-
-            polyLineLength = sequentialCalculationPolylineLength[countOfPointsObject - 1];
         }
     }
 }
