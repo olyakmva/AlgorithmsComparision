@@ -10,10 +10,10 @@ namespace AlgorithmsLibrary
         private double[,] XParameter;
         private double[,] YParameter;
 
-        private List<MapPoint> arrayOfMapPoints = null;
+        private List<MapPoint> arrayOfMapPoints;
         private int countOfPointsObject;
-        private double[] sequentialCalculationPolylineLength = null;
-        private double[] arrayDistancesBetweenPoints = null;
+        private double[] sequentialCalculationPolylineLength;
+        private double[] arrayDistancesBetweenPoints;
 
         private bool FourierClosedType;
 
