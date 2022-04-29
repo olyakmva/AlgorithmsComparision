@@ -12,7 +12,7 @@ namespace AlgorithmsLibrary
 
         private List<MapPoint> arrayOfMapPoints;
         private int countOfPointsObject;
-        private double[] sequentialCalculationPolylineLength;
+        private double[] S; //sequentialPolylineLength
         private double[] arrayDistancesBetweenPoints;
 
         private bool FourierClosedType;
@@ -77,7 +77,7 @@ namespace AlgorithmsLibrary
         public void GetAllDist()
         {
             arrayDistancesBetweenPoints = new double[countOfPointsObject - 1];
-            sequentialCalculationPolylineLength = new double[countOfPointsObject];
+            S = new double[countOfPointsObject];
 
             if (!FourierClosedType)
                 AddSymmetricPolyline();
@@ -90,84 +90,64 @@ namespace AlgorithmsLibrary
                 arrayDistancesBetweenPoints[i] = p1.DistanceToVertex(p2);
             }
 
-            double tmpDist = 0.0;
-            sequentialCalculationPolylineLength[0] = 0.0;
-            for (int i = 0; i < countOfPointsObject - 1; i++)
+            S[0] = 0.0;
+            for (int i = 1; i < countOfPointsObject; i++)
             {
-                sequentialCalculationPolylineLength[i + 1] = tmpDist + arrayDistancesBetweenPoints[i];
-                tmpDist = sequentialCalculationPolylineLength[i + 1];
+                double previousSequentialLength = S[i - 1];
+                S[i] = previousSequentialLength + arrayDistancesBetweenPoints[i - 1];
             }
 
-            polyLineLength = sequentialCalculationPolylineLength[countOfPointsObject - 1];
+            polyLineLength = S[countOfPointsObject - 1];
         }
 
         public double[,] GetFourierXparameter()
         {
-            if (fourierSeriesLength <= 0)
-                return null;
-
-            for (int i = 1; i < countOfPointsObject; i++)
+            for (int k = 0; k < countOfPointsObject - 1; k++)
             {
-                MapPoint p1 = arrayOfMapPoints[i - 1];
-                MapPoint p2 = arrayOfMapPoints[i];
-                double delx = (double)(p2.X - p1.X);
-                double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
-                double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
-                double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
-                double aa = p1.X + cc;
-                double bb = delx / dels;
-                double v1 = aa * dels;
-                double v2 = bb / 2 * dels2;
-                XParameter[0, 0] += v1 / polyLineLength + v2 / polyLineLength;
+                double diffX = arrayOfMapPoints[k + 1].X - arrayOfMapPoints[k].X;
+                double diffS = S[k + 1] - S[k];
+                double summ1 = arrayOfMapPoints[k].X * diffS;
+                double summ2 = 0.5 * diffX * diffS;
+                XParameter[0, 0] += (summ1 + summ2) / polyLineLength;
             }
 
-            for (int k = 1; k < fourierSeriesLength + 1; k++)
+            for (int n = 1; n < fourierSeriesLength + 1; n++)
             {
-                double angle = 2 * Math.PI * k / polyLineLength;
-                for (int i = 1; i < countOfPointsObject; i++)
+                double angle = 2.0 * Math.PI * n / polyLineLength;
+                for (int k = 0; k < countOfPointsObject - 1; k++)
                 {
-                    MapPoint p1 = arrayOfMapPoints[i - 1];
-                    MapPoint p2 = arrayOfMapPoints[i];
-                    double delx = p2.X - p1.X;
-                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
-                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
-                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
-                    double aa = p1.X + cc;
-                    double bb = delx / dels;
-                    double k1 = (double)k;
-                    double aa1 = aa / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v1 = aa1 * delsin;
-                    double bb1 = bb / Math.PI / k1;
-                    double delsinS = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) * sequentialCalculationPolylineLength[i] - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength) * sequentialCalculationPolylineLength[i - 1];
-                    double v2 = bb1 * delsinS;
-                    double bb2 = bb1 * polyLineLength / 2.0 / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v3 = bb2 * delcos;
-                    XParameter[k, 0] += v1 + v2 + v3;
+                    double XK1 = arrayOfMapPoints[k + 1].X;
+                    double XK = arrayOfMapPoints[k].X;
+                    double divXS = (XK1 - XK) / (S[k + 1] - S[k]);
+
+                    double SinK1 = Math.Sin(angle * S[k + 1]);
+                    double SinK = Math.Sin(angle * S[k]);
+                    double CosK1 = Math.Cos(angle * S[k + 1]);
+                    double CosK = Math.Cos(angle * S[k]);
+
+                    double v1 = (XK - divXS * S[k]) * (SinK1 - SinK) / angle;
+                    double v2 = divXS * (SinK1 * S[k + 1] - SinK * S[k]) / angle;
+                    double v3 = divXS * (CosK1 - CosK) / (angle * angle);
+
+                    XParameter[n, 0] += (v1 + v2 + v3) * 2 / polyLineLength;
                 }
 
-                for (int i = 1; i < countOfPointsObject; i++)
+                for (int k = 0; k < countOfPointsObject - 1; k++)
                 {
-                    MapPoint p1 = arrayOfMapPoints[i - 1];
-                    MapPoint p2 = arrayOfMapPoints[i];
-                    double delx = p2.X - p1.X;
-                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
-                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
-                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
-                    double aa = p1.X + cc;
-                    double bb = delx / dels;
-                    double k1 = (double)k;
-                    double aa1 = (-1.0) * aa / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v1 = aa1 * delcos;
-                    double bb1 = (-1.0) * bb / Math.PI / k1;
-                    double delcosS = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) * sequentialCalculationPolylineLength[i] - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength) * sequentialCalculationPolylineLength[i - 1];
-                    double v2 = bb1 * delcosS;
-                    double bb2 = (-1.0) * bb1 * polyLineLength / 2.0 / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v3 = bb2 * delsin;
-                    XParameter[k, 1] += v1 + v2 + v3;
+                    double XK1 = arrayOfMapPoints[k + 1].X;
+                    double XK = arrayOfMapPoints[k].X;
+                    double divXS = (XK1 - XK) / (S[k + 1] - S[k]);
+
+                    double SinK1 = Math.Sin(angle * S[k + 1]);
+                    double SinK = Math.Sin(angle * S[k]);
+                    double CosK1 = Math.Cos(angle * S[k + 1]);
+                    double CosK = Math.Cos(angle * S[k]);
+
+                    double v1 = -(XK - divXS * S[k]) * (CosK1 - CosK) / angle;
+                    double v2 = - divXS * (CosK1 * S[k + 1] - CosK * S[k]) / angle;
+                    double v3 = divXS * (SinK1 - SinK) / (angle * angle);
+
+                    XParameter[n, 1] += (v1 + v2 + v3) * 2 / polyLineLength;
                 }
             }
 
@@ -175,71 +155,52 @@ namespace AlgorithmsLibrary
         }
         public double[,] GetFourierYparameter()
         {
-            if (fourierSeriesLength <= 0)
-                return null;
-
-            for (int i = 1; i < countOfPointsObject; i++)
+            for (int k = 0; k < countOfPointsObject - 1; k++)
             {
-                MapPoint p1 = arrayOfMapPoints[i - 1];
-                MapPoint p2 = arrayOfMapPoints[i];
-                double delx = p2.Y - p1.Y;
-                double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
-                double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
-                double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
-                double aa = p1.Y + cc;
-                double bb = delx / dels;
-                double v1 = aa * dels;
-                double v2 = bb / 2 * dels2;
-                YParameter[0, 0] += v1 / polyLineLength + v2 / polyLineLength;
+                double diffY = arrayOfMapPoints[k + 1].Y - arrayOfMapPoints[k].Y;
+                double diffS = S[k + 1] - S[k];
+                double summ1 = arrayOfMapPoints[k].Y * diffS;
+                double summ2 = 0.5 * diffY * diffS;
+                YParameter[0, 0] += (summ1 + summ2) / polyLineLength;
             }
 
-            for (int k = 1; k < fourierSeriesLength + 1; k++)
+            for (int n = 1; n < fourierSeriesLength + 1; n++)
             {
-                double angle = 2 * Math.PI * k / polyLineLength;
-                for (int i = 1; i < countOfPointsObject; i++)
+                double angle = 2.0 * Math.PI * n / polyLineLength;
+                for (int k = 0; k < countOfPointsObject - 1; k++)
                 {
-                    MapPoint p1 = arrayOfMapPoints[i - 1];
-                    MapPoint p2 = arrayOfMapPoints[i];
-                    double delx = p2.Y - p1.Y;
-                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
-                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
-                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
-                    double aa = p1.Y + cc;
-                    double bb = delx / dels;
-                    double k1 = (double)k;
-                    double aa1 = aa / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v1 = aa1 * delsin;
-                    double bb1 = bb / Math.PI / k1;
-                    double delsinS = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) * sequentialCalculationPolylineLength[i] - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength) * sequentialCalculationPolylineLength[i - 1];
-                    double v2 = bb1 * delsinS;
-                    double bb2 = bb1 * polyLineLength / 2.0 / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v3 = bb2 * delcos;
-                    YParameter[k, 0] += v1 + v2 + v3;
+                    double YK1 = arrayOfMapPoints[k + 1].Y;
+                    double YK = arrayOfMapPoints[k].Y;
+                    double divYS = (YK1 - YK) / (S[k + 1] - S[k]);
+
+                    double SinK1 = Math.Sin(angle * S[k + 1]);
+                    double SinK = Math.Sin(angle * S[k]);
+                    double CosK1 = Math.Cos(angle * S[k + 1]);
+                    double CosK = Math.Cos(angle * S[k]);
+
+                    double v1 = (YK - divYS * S[k]) * (SinK1 - SinK) / angle;
+                    double v2 = divYS * (SinK1 * S[k + 1] - SinK * S[k]) / angle;
+                    double v3 = divYS * (CosK1 - CosK) / (angle * angle);
+
+                    YParameter[n, 0] += (v1 + v2 + v3) * 2 / polyLineLength;
                 }
 
-                for (int i = 1; i < countOfPointsObject; i++)
+                for (int k = 0; k < countOfPointsObject - 1; k++)
                 {
-                    MapPoint p1 = arrayOfMapPoints[i - 1];
-                    MapPoint p2 = arrayOfMapPoints[i];
-                    double delx = p2.Y - p1.Y;
-                    double dels = sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1];
-                    double dels2 = sequentialCalculationPolylineLength[i] * sequentialCalculationPolylineLength[i] - sequentialCalculationPolylineLength[i - 1] * sequentialCalculationPolylineLength[i - 1];
-                    double cc = -1.0 * delx * sequentialCalculationPolylineLength[i - 1] / dels;
-                    double aa = p1.Y + cc;
-                    double bb = delx / dels;
-                    double k1 = (double)k;
-                    double aa1 = (-1.0) * aa / Math.PI / k1;
-                    double delcos = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v1 = aa1 * delcos;
-                    double bb1 = (-1.0) * bb / Math.PI / k1;
-                    double delcosS = Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) * sequentialCalculationPolylineLength[i] - Math.Cos(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength) * sequentialCalculationPolylineLength[i - 1];
-                    double v2 = bb1 * delcosS;
-                    double bb2 = (-1.0) * bb1 * polyLineLength / 2.0 / Math.PI / k1;
-                    double delsin = Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i] / polyLineLength) - Math.Sin(2.0 * k1 * Math.PI * sequentialCalculationPolylineLength[i - 1] / polyLineLength);
-                    double v3 = bb2 * delsin;
-                    YParameter[k, 1] += v1 + v2 + v3;
+                    double YK1 = arrayOfMapPoints[k + 1].Y;
+                    double YK = arrayOfMapPoints[k].Y;
+                    double divYS = (YK1 - YK) / (S[k + 1] - S[k]);
+
+                    double SinK1 = Math.Sin(angle * S[k + 1]);
+                    double SinK = Math.Sin(angle * S[k]);
+                    double CosK1 = Math.Cos(angle * S[k + 1]);
+                    double CosK = Math.Cos(angle * S[k]);
+
+                    double v1 = - (YK - divYS * S[k]) * (CosK1 - CosK) / angle;
+                    double v2 = - divYS * (CosK1 * S[k + 1] - CosK * S[k]) / angle;
+                    double v3 = divYS * (SinK1 - SinK) / (angle * angle);
+
+                    YParameter[n, 1] += (v1 + v2 + v3) * 2 / polyLineLength;
                 }
             }
 

@@ -14,8 +14,8 @@ namespace AlgorithmsLibrary
             }
         }
 
-        private const int OUTPUT_PERCENT_POINTS = 50;
-        private const int FOURIER_SERIES_LENGTH = 500;
+        private const int OUTPUT_PERCENT_POINTS = 90;
+        private const int FOURIER_SERIES_LENGTH = 1000;
         private const double APPROXIMATION_RATIO = 0.1;
         private void Run(List<MapPoint> chain, int startIndex, int endIndex)
         {
@@ -30,18 +30,13 @@ namespace AlgorithmsLibrary
                 int outputPointCount = chain.Count * OUTPUT_PERCENT_POINTS / 100; 
                 var outputs = fourier.GetRecoveryPoints(outputPointCount);
 
+                chain.Clear();
                 for (int i = 0; i < outputPointCount; i++)
                 {
-                    chain[i].X = outputs[i].X;
-                    chain[i].Y = outputs[i].Y;
+                    chain.Add(new MapPoint { X = outputs[i].X, Y = outputs[i].Y });
                 }
 
-                chain[outputPointCount] = new MapPoint { X = chain[0].X, Y = chain[0].Y };
-
-                while (chain.Count > outputPointCount + 1)
-                {
-                    chain.RemoveAt(chain.Count - 1);
-                }
+                chain.Add(new MapPoint { X = chain[0].X, Y = chain[0].Y });
             }
             else
             {
@@ -54,12 +49,16 @@ namespace AlgorithmsLibrary
                 int outputPointCount = chain.Count * OUTPUT_PERCENT_POINTS / 100;
                 var outputs = fourier.GetRecoveryPoints(outputPointCount);
 
-                int k = outputs.Count / 2;
+                var endPoint = new MapPoint { X = chain[endIndex].X, Y = chain[endIndex].Y };
+
+                int k = outputs.Count / 2 + 1;
                 chain.Clear();
                 for (int i = 0; i < k; i++)
                 {
                     chain.Add(new MapPoint { X = outputs[i].X, Y = outputs[i].Y });
                 }
+
+                chain.Add(endPoint);
             }
         }
     }
