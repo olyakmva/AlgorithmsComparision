@@ -121,7 +121,7 @@ namespace AlgorithmsLibrary
             return (v1 + v2 + v3) * 2 / polyLineLength;
         }
 
-        public double GetImagineParameter(int k, double angle)
+        public double GetImagineParameter(int k, double angle) 
         {
             double TK1 = arrayOfMapPoints[k + 1].X;
             double TK = arrayOfMapPoints[k].X;
