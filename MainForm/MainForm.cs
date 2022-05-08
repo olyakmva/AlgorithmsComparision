@@ -36,53 +36,53 @@ namespace MainForm
 
         private void CreateAlgmControls()
         {
-            int x = 0, y = 55, ctrlHeight = 140;
+            int x = 0, y = 55; 
             _listCtrls = new List<AlgParamControl>();
-
-            
+             
             AlgParamControl fourierCtrl = new AlgParamControl()
             {
                 Location = new Point(x, y),
                 AlgmName = "FourierDesAlgm"
             };
             _listCtrls.Add(fourierCtrl);
+            int ctrlHeight = fourierCtrl.Size.Height+3;
             y += ctrlHeight;
-            //AlgParamControl douglasCtrl = new AlgParamControl()
-            //{
-            //    Location = new Point(x, y),
-            //    AlgmName = "DouglasPeuckerAlgm"
-            //};
-            //_listCtrls.Add(douglasCtrl);
-            //y += ctrlHeight;
-            //AlgParamControl liCtrl = new AlgParamControl()
-            //{
-            //    AlgmName = "LiOpenshawAlgm",
-            //    Location = new Point(x, y)
-            //};
-            //_listCtrls.Add(liCtrl);
-            //y += ctrlHeight;
-            //AlgParamControl visvWhyatCtrl = new AlgParamControl()
-            //{
-            //    AlgmName = "VisvWhyattAlgm",
-            //    Location = new Point(x, y)
-            //};
-            //y += ctrlHeight;
-            //_listCtrls.Add(visvWhyatCtrl);
+            AlgParamControl douglasCtrl = new AlgParamControl()
+            {
+                Location = new Point(x, y),
+                AlgmName = "DouglasPeuckerAlgm"
+            };
+            _listCtrls.Add(douglasCtrl);
+            y += ctrlHeight;
+            AlgParamControl liCtrl = new AlgParamControl()
+            {
+                AlgmName = "LiOpenshawAlgm",
+                Location = new Point(x, y)
+            };
+            _listCtrls.Add(liCtrl);
+            y += ctrlHeight;
+            AlgParamControl visvWhyatCtrl = new AlgParamControl()
+            {
+                AlgmName = "VisvWhyattAlgm",
+                Location = new Point(x, y)
+            };
+            y += ctrlHeight;
+            _listCtrls.Add(visvWhyatCtrl);
 
-            //AlgParamControl sleeveFitCtrl = new AlgParamControl()
-            //{
-            //    AlgmName = "SleeveFitAlgm",
-            //    Location = new Point(x, y)
-            //};
-            //y += ctrlHeight;
-            //_listCtrls.Add(sleeveFitCtrl);
+            AlgParamControl sleeveFitCtrl = new AlgParamControl()
+            {
+                AlgmName = "SleeveFitAlgm",
+                Location = new Point(x, y)
+            };
+            y += ctrlHeight;
+            _listCtrls.Add(sleeveFitCtrl);
 
-             mainContainer.Panel1.Controls .Add(fourierCtrl);
-            //mainContainer.Panel1.Controls .Add(douglasCtrl);
-            //mainContainer.Panel1.Controls.Add(liCtrl);
-            //mainContainer.Panel1 .Controls.Add(visvWhyatCtrl);
-            //mainContainer .Panel1.Controls.Add(sleeveFitCtrl);
-           
+            mainContainer.Panel1.Controls .Add(fourierCtrl);
+            mainContainer.Panel1.Controls.Add(douglasCtrl);
+            mainContainer.Panel1.Controls.Add(liCtrl);
+            mainContainer.Panel1.Controls.Add(visvWhyatCtrl);
+            mainContainer.Panel1.Controls.Add(sleeveFitCtrl);
+
 
             foreach (var ctrl in _listCtrls)
             {
@@ -389,11 +389,13 @@ namespace MainForm
             {
                 Directory.CreateDirectory(outFolder);
             }
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog.DefaultExt = "*.txt";
-           saveFileDialog.InitialDirectory = Path.Combine(_applicationPath, outFolder);
-            saveFileDialog.FileName = fileName;
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = @"txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                DefaultExt = "*.txt",
+                InitialDirectory = Path.Combine(_applicationPath, outFolder),
+                FileName = fileName
+            };
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var fileNameWithPath = saveFileDialog.FileName;

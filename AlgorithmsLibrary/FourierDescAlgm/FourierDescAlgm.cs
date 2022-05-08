@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace AlgorithmsLibrary
 {
     public class FourierDescAlgm : ISimplificationAlgm
     {
         public SimplificationAlgmParameters Options { get; set; }
+        private int OUTPUT_PERCENT_POINTS = 50;
         public virtual void Run(MapData map)
         {
+            OUTPUT_PERCENT_POINTS = Convert.ToInt32( Options.RemainingPercent);
             foreach (var chain in map.VertexList)
             {
                 int endIndex = chain.Count - 1;
@@ -14,7 +17,7 @@ namespace AlgorithmsLibrary
             }
         }
 
-        private const int OUTPUT_PERCENT_POINTS = 90;
+        
         private const int FOURIER_SERIES_LENGTH = 1000;
         private const double APPROXIMATION_RATIO = 0.1;
         private void Run(List<MapPoint> chain, int startIndex, int endIndex)
