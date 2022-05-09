@@ -38,19 +38,19 @@
   <ItemGroup>
     <Reference Include="DotSpatial.Data, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Data.dll</HintPath>
+      <HintPath>..\MainForm\bin\Debug\DotSpatial.Data.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Mono">
-      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Mono.dll</HintPath>
+      <HintPath>..\MainForm\bin\Debug\DotSpatial.Mono.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Projections">
-      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Projections.dll</HintPath>
+      <HintPath>..\MainForm\bin\Debug\DotSpatial.Projections.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Serialization">
-      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Serialization.dll</HintPath>
+      <HintPath>..\MainForm\bin\Debug\DotSpatial.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Topology">
-      <HintPath>D:\Task\25_02_UIversion\Lib\DotSpatial.Topology.dll</HintPath>
+      <HintPath>..\MainForm\bin\Debug\DotSpatial.Topology.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

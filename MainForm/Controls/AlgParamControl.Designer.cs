@@ -206,7 +206,7 @@
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label5.Location = new System.Drawing.Point(193, 87);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(41, 17);
+            this.label5.Size = new System.Drawing.Size(39, 16);
             this.label5.TabIndex = 10;
             this.label5.Text = "times";
             // 
@@ -224,6 +224,8 @@
             // checkBoxPercent
             // 
             this.checkBoxPercent.AutoSize = true;
+            this.checkBoxPercent.Checked = true;
+            this.checkBoxPercent.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxPercent.Location = new System.Drawing.Point(233, 87);
             this.checkBoxPercent.Name = "checkBoxPercent";
             this.checkBoxPercent.Size = new System.Drawing.Size(18, 17);
@@ -277,7 +279,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(193, 117);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 17);
+            this.label1.Size = new System.Drawing.Size(39, 16);
             this.label1.TabIndex = 10;
             this.label1.Text = "times";
             // 

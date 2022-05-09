@@ -23,8 +23,10 @@ namespace UnitTestProject1
                 RemainingPercent = 20
             };
 
-            algm = new SleeveFitWithCriterion( new PointPercentCriterion());
-            algm.Options = options;
+            algm = new SleeveFitWithCriterion(new PointPercentCriterion())
+            {
+                Options = options
+            };
         }
 
         [TestMethod]
