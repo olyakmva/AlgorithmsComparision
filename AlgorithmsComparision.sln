@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32413.511
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmsLibrary", "AlgorithmsLibrary\AlgorithmsLibrary.csproj", "{F02989B0-5BFB-4D6C-9D04-2B7ED2AD347A}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{EECCBF4D-8F26-4323-8F0C-E4E62AFF7CFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportMapLibrary", "SupportLib\SupportMapLibrary.csproj", "{8BFBE16C-60E2-4A96-B439-538F726887F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatchProcessing", "BatchProcessing\BatchProcessing.csproj", "{EEB24C73-542B-41A1-883A-82B885660819}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8BFBE16C-60E2-4A96-B439-538F726887F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BFBE16C-60E2-4A96-B439-538F726887F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BFBE16C-60E2-4A96-B439-538F726887F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB24C73-542B-41A1-883A-82B885660819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB24C73-542B-41A1-883A-82B885660819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB24C73-542B-41A1-883A-82B885660819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB24C73-542B-41A1-883A-82B885660819}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
